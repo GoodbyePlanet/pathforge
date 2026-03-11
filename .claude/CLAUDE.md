@@ -24,6 +24,11 @@ npm run build
 npm run lint
 ```
 
+## Project Rules
+- Follow coding guidelines from @.claude/rules/code-style.md
+- Follow formatting guidelines from @.claude/rules/formatting-style.md
+- Follow styling guidelines from @.claude/rules/styling.md
+
 ## Architecture
 
 **Content** lives in `/content/<folder>/<file>.md`. Folders = learning paths, files = nodes in the graph.
