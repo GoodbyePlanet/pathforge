@@ -25,28 +25,6 @@ export function UserCard({ name, email }: UserCardProps) {
 }
 ```
 
-## Types
-
-- Prefer **`type` over `interface`** for most cases.
-- Use **`interface` only when extending or implementing object shapes**.
-- Avoid using **`any`**. Use `unknown` when the type is not known.
-- Keep types **small, composable, and reusable**.
-- Export shared types from a **central location** such as `types/` or `lib/types.ts`.
-- Name types using **PascalCase**.
-- Use **union types** and **utility types** (`Partial`, `Pick`, `Omit`) when appropriate.
-- Prefer **explicit types for public APIs** (props, function returns, exported values).
-- Avoid overly complex nested types.
-
-### Example
-
-```ts
-export type User = {
-  id: string
-  email: string
-  createdAt: Date
-}
-```
-
 ## Code Quality
 
 - Prefer **small, focused functions and components**.
