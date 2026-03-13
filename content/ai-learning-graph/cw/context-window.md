@@ -1,3 +1,7 @@
+---
+assignee: John Doe
+---
+
 # Context Window
 
 The context window is the maximum amount of text (measured in tokens) that a language model can process in a single inference call — both input and output combined.

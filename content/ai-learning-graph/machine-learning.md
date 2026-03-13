@@ -1,3 +1,7 @@
+---
+assignee: John Doe
+---
+
 # Machine Learning
 
 Machine Learning is a subfield of AI where systems learn patterns from data rather than following explicitly programmed rules. A model improves its performance on a task through exposure to examples.

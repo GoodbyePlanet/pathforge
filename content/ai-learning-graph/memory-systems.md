@@ -1,3 +1,7 @@
+---
+assignee: John Doe
+---
+
 # Memory Systems
 
 Memory systems allow AI agents to store and retrieve information across steps, sessions, and conversations. Without memory, every agent interaction starts from scratch.

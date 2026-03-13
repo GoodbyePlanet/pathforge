@@ -1,3 +1,7 @@
+---
+assignee: John Doe
+---
+
 # AI
 
 Artificial Intelligence is the field of computer science focused on building systems that can perform tasks that typically require human intelligence — reasoning, learning, perception, and decision-making.

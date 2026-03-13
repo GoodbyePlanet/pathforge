@@ -1,12 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ReactFlow,
   Background,
   BackgroundVariant,
   useNodesState,
+  useReactFlow,
+  ReactFlowProvider,
   type Node,
   type Edge,
   type NodeMouseHandler,
@@ -16,8 +17,11 @@ import '@xyflow/react/dist/style.css';
 
 import { useForceLayout } from '@/lib/forceLayout';
 import { GraphNode } from '@/components/GraphNode';
+import { GraphEdge } from '@/components/GraphEdge';
+import { NodePopup } from '@/components/NodePopup';
 
 const nodeTypes = { graphNode: GraphNode };
+const edgeTypes = { graphEdge: GraphEdge };
 
 type GraphViewProps = {
   folder: string;
@@ -25,15 +29,68 @@ type GraphViewProps = {
   edges: Edge[];
 };
 
+function getConnectedNodeIds(nodeId: string, edges: Edge[]): Set<string> {
+  const connected = new Set<string>();
+  for (const edge of edges) {
+    if (edge.source === nodeId) connected.add(edge.target);
+    if (edge.target === nodeId) connected.add(edge.source);
+  }
+  return connected;
+}
+
+type PopupState = {
+  nodeId: string;
+  label: string;
+  assignee?: string;
+  position: { x: number; y: number };
+};
+
 function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewProps) {
-  const router = useRouter();
+  const { flowToScreenPosition } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState(rawNodes);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [popup, setPopup] = useState<PopupState | null>(null);
+
+  const connectedIds = useMemo(() => {
+    if (!selectedNodeId) return new Set<string>();
+    return getConnectedNodeIds(selectedNodeId, rawEdges);
+  }, [selectedNodeId, rawEdges]);
 
   const { onNodeDragStart, onNodeDrag, onNodeDragStop } = useForceLayout(
     rawNodes,
     rawEdges,
     setNodes,
   );
+
+  // Apply selection/highlight data to nodes
+  useEffect(() => {
+    setNodes((currentNodes) =>
+      currentNodes.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          isSelected: node.id === selectedNodeId,
+          isHighlighted: connectedIds.has(node.id),
+          isDimmed: selectedNodeId !== null
+            && node.id !== selectedNodeId
+            && !connectedIds.has(node.id),
+        },
+      })),
+    );
+  }, [selectedNodeId, connectedIds, setNodes]);
+
+  const styledEdges = useMemo(() => {
+    if (!selectedNodeId) return rawEdges;
+    return rawEdges.map((edge) => {
+      const isConnected = edge.source === selectedNodeId || edge.target === selectedNodeId;
+      return {
+        ...edge,
+        style: isConnected
+          ? { stroke: '#6b7280', strokeWidth: 2 }
+          : { stroke: '#d1d5db', strokeWidth: 1, opacity: 0.2 },
+      };
+    });
+  }, [rawEdges, selectedNodeId]);
 
   const handleDragStart: OnNodeDrag = useCallback(
     (_, node) => onNodeDragStart(node.id),
@@ -52,34 +109,73 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
 
   const handleNodeClick: NodeMouseHandler = useCallback(
     (_, node) => {
-      router.push(`/${folder}/${node.id}`);
+      if (selectedNodeId === node.id) {
+        setSelectedNodeId(null);
+        setPopup(null);
+        return;
+      }
+
+      setSelectedNodeId(node.id);
+
+      const screenPos = flowToScreenPosition({
+        x: node.position.x,
+        y: node.position.y,
+      });
+
+      setPopup({
+        nodeId: node.id,
+        label: String(node.data.label),
+        assignee: node.data.assignee as string | undefined,
+        position: { x: screenPos.x, y: screenPos.y + 20 },
+      });
     },
-    [folder, router],
+    [selectedNodeId, flowToScreenPosition],
   );
 
+  const handlePaneClick = useCallback(() => {
+    setSelectedNodeId(null);
+    setPopup(null);
+  }, []);
+
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={rawEdges}
-      onNodesChange={onNodesChange}
-      onNodeDragStart={handleDragStart}
-      onNodeDrag={handleDrag}
-      onNodeDragStop={handleDragStop}
-      onNodeClick={handleNodeClick}
-      nodeTypes={nodeTypes}
-      nodesDraggable={true}
-      nodesConnectable={false}
-      elementsSelectable={false}
-      defaultEdgeOptions={{
-        type: 'straight',
-        style: { stroke: '#93c5fd', strokeWidth: 1 },
-      }}
-      fitView
-      fitViewOptions={{ padding: 0.2 }}
-      style={{ backgroundColor: '#f8fafc' }}
-    >
-      <Background variant={BackgroundVariant.Dots} gap={24} size={1} color='#d1d5db' />
-    </ReactFlow>
+    <>
+      <ReactFlow
+        nodes={nodes}
+        edges={styledEdges}
+        onNodesChange={onNodesChange}
+        onNodeDragStart={handleDragStart}
+        onNodeDrag={handleDrag}
+        onNodeDragStop={handleDragStop}
+        onNodeClick={handleNodeClick}
+        onPaneClick={handlePaneClick}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        nodesDraggable={true}
+        nodesConnectable={false}
+        elementsSelectable={false}
+        defaultEdgeOptions={{
+          type: 'graphEdge',
+          style: { stroke: '#d1d5db', strokeWidth: 1 },
+        }}
+        fitView
+        fitViewOptions={{ padding: 0.2 }}
+        style={{ backgroundColor: '#f8fafc' }}
+      >
+        <Background variant={BackgroundVariant.Dots} gap={24} size={1} color='#d1d5db' />
+      </ReactFlow>
+      {popup && (
+        <NodePopup
+          label={popup.label}
+          assignee={popup.assignee}
+          href={`/${folder}/${popup.nodeId}`}
+          position={popup.position}
+          onClose={() => {
+            setSelectedNodeId(null);
+            setPopup(null);
+          }}
+        />
+      )}
+    </>
   );
 }
 
@@ -94,7 +190,9 @@ export function GraphView(props: GraphViewProps) {
 
   return (
     <div className='w-full h-full'>
-      <GraphViewInner {...props} />
+      <ReactFlowProvider>
+        <GraphViewInner {...props} />
+      </ReactFlowProvider>
     </div>
   );
 }

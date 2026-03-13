@@ -1,3 +1,7 @@
+---
+assignee: John Doe
+---
+
 # Model Evaluation
 
 Model evaluation measures how well a trained model performs and whether it will generalize to new data. Good evaluation is as important as good training.

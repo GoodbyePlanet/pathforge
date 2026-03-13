@@ -44,11 +44,11 @@ export function useForceLayout(
         'link',
         forceLink<SimNode, SimLink>(simLinks)
           .id((d) => d.id)
-          .distance(180),
+          .distance(100),
       )
-      .force('charge', forceManyBody<SimNode>().strength(-500))
+      .force('charge', forceManyBody<SimNode>().strength(-300))
       .force('center', forceCenter(0, 0))
-      .force('collide', forceCollide<SimNode>(80))
+      .force('collide', forceCollide<SimNode>(50))
       .alphaDecay(0.02);
 
     // Run simulation synchronously to get final positions immediately

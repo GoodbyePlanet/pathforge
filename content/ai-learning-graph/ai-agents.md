@@ -1,3 +1,7 @@
+---
+assignee: John Doe
+---
+
 # AI Agents
 
 An AI agent is a system that perceives its environment, makes decisions, and takes actions to achieve goals — often autonomously over multiple steps. Unlike a single model call, agents operate in loops.

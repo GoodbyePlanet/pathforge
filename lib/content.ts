@@ -1,7 +1,9 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-export type FileEntry = { slug: string; title: string; path: string };
+import matter from 'gray-matter';
+
+export type FileEntry = { slug: string; title: string; path: string; assignee?: string };
 
 const contentDir = path.join(process.cwd(), 'content');
 
@@ -29,9 +31,13 @@ export async function getFilesInFolder(folder: string): Promise<FileEntry[]> {
     mdFiles.map(async (entry) => {
       const slug = entry.name.replace(/\.md$/, '');
       const filePath = path.join(folderPath, entry.name);
-      const content = await fs.readFile(filePath, 'utf-8');
+      const raw = await fs.readFile(filePath, 'utf-8');
+      const { data: frontmatter, content } = matter(raw);
       const title = extractH1Title(content) ?? slug;
-      return { slug, title, path: filePath };
+      const assignee = typeof frontmatter.assignee === 'string'
+        ? frontmatter.assignee
+        : undefined;
+      return { slug, title, path: filePath, assignee };
     }),
   );
 

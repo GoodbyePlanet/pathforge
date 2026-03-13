@@ -1,3 +1,7 @@
+---
+assignee: John Doe
+---
+
 # Chain of Thought
 
 Chain-of-thought (CoT) prompting asks a language model to show its reasoning step-by-step before producing a final answer. This simple technique dramatically improves performance on reasoning-heavy tasks.

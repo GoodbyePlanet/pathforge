@@ -1,3 +1,7 @@
+---
+assignee: John Doe
+---
+
 # Embeddings
 
 An embedding is a dense vector representation of data (text, images, audio) in a high-dimensional space. Similar items are placed close together; dissimilar items are placed far apart.

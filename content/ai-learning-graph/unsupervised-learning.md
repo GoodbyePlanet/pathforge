@@ -1,3 +1,7 @@
+---
+assignee: John Doe
+---
+
 # Unsupervised Learning
 
 Unsupervised learning finds structure in data without labeled examples. The model discovers patterns, groupings, or representations on its own.

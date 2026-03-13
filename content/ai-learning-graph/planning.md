@@ -1,3 +1,7 @@
+---
+assignee: John Doe
+---
+
 # Planning
 
 Planning is the process of decomposing a high-level goal into a sequence of concrete, executable steps. For AI agents, planning is what separates single-turn responses from multi-step autonomous work.
