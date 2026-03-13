@@ -19,7 +19,7 @@ Build a Next.js app that reads markdown files from the local filesystem (organiz
 ```
 pathforge/
 ├── content/                      # Markdown files (user-managed)
-│   └── ai-learning-path/
+│   └── ai-learning-graph/
 │       ├── rag.md
 │       ├── context-window.md
 │       └── mcps.md
@@ -55,7 +55,7 @@ npm install @xyflow/react react-markdown unified remark-parse remark-wiki-link r
 ```
 
 ### Step 3: Create sample content
-Create `/content/ai-learning-path/` with 3 sample markdown files that reference each other using `[[wiki-links]]`:
+Create `/content/ai-learning-graph/` with 3 sample markdown files that reference each other using `[[wiki-links]]`:
 - `rag.md` — references `[[context-window]]`
 - `context-window.md` — references `[[rag]]` and `[[mcps]]`
 - `mcps.md` — references `[[context-window]]`
@@ -136,9 +136,9 @@ Create `/content/ai-learning-path/` with 3 sample markdown files that reference 
 
 ## Verification
 
-1. Create sample markdown files in `/content/ai-learning-path/` with cross-references
+1. Create sample markdown files in `/content/ai-learning-graph/` with cross-references
 2. Run `npm run dev` and verify:
-   - Home page lists the `ai-learning-path` folder
+   - Home page lists the `ai-learning-graph` folder
    - Folder page lists all markdown files
    - Clicking a file renders the markdown with clickable wiki-links
    - Graph page shows nodes for each file with edges for references
