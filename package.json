@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/d3-force": "^3.0.10",
     "@xyflow/react": "^12.4.4",
+    "d3-force": "^3.0.0",
     "next": "^16.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
