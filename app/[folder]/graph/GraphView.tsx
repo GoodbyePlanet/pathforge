@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ReactFlow,
+  Background,
+  BackgroundVariant,
   useNodesState,
   type Node,
   type Edge,
@@ -75,7 +77,9 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
       fitView
       fitViewOptions={{ padding: 0.2 }}
       style={{ backgroundColor: '#f8fafc' }}
-    />
+    >
+      <Background variant={BackgroundVariant.Dots} gap={24} size={1} color='#d1d5db' />
+    </ReactFlow>
   );
 }
 
