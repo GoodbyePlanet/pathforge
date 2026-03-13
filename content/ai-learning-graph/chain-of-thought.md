@@ -4,7 +4,8 @@ assignee: John Doe
 
 # Chain of Thought
 
-Chain-of-thought (CoT) prompting asks a language model to show its reasoning step-by-step before producing a final answer. This simple technique dramatically improves performance on reasoning-heavy tasks.
+Chain-of-thought (CoT) prompting asks a language model to show its reasoning step-by-step before producing
+a final answer. This simple technique dramatically improves performance on reasoning-heavy tasks.
 
 ## The Core Idea
 
@@ -36,4 +37,5 @@ Generating intermediate steps forces the model to allocate more computation to t
 
 ## When It Doesn't Help
 
-Simple classification or retrieval tasks don't benefit from CoT — the overhead adds cost and latency without accuracy gains. Match the technique to the task complexity.
+Simple classification or retrieval tasks don't benefit from CoT — the overhead adds cost and latency without
+accuracy gains. Match the technique to the task complexity.

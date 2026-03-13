@@ -10,7 +10,7 @@ Machine Learning is a subfield of AI where systems learn patterns from data rath
 
 - **[[supervised-learning]]** — learning from labeled input-output pairs
 - **[[unsupervised-learning]]** — finding structure in unlabeled data
-- **[[model-evaluation]]** — measuring how well a model actually works
+- **[[reinforcement-learning]]** — learning through trial and error to maximize a reward.
 
 ## Key Concepts
 

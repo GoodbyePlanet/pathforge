@@ -17,4 +17,6 @@ AI is a broad field. The best entry points depending on your background:
 
 ## Why Learn AI Now
 
-AI has shifted from academic research to practical infrastructure. Understanding these foundations helps you build better products, work alongside AI tools more effectively, and reason about what the technology can and cannot do.
+AI has shifted from academic research to practical infrastructure.
+Understanding these foundations helps you build better products, work alongside AI tools more effectively,
+and reason about what the technology can and cannot do.
