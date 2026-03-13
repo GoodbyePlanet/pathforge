@@ -4,14 +4,16 @@ assignee: John Doe
 
 # Tokenization
 
-Tokenization is the process of converting raw text into a sequence of tokens — the discrete units that language models
-operate on. Every piece of text you send to a model gets tokenized before processing.
-
-TDB...
-
-## What Is a Token?
+Tokenization is the process of converting raw text into a sequence of tokens — the discrete units that language
+models operate on. Every piece of text you send to a model gets tokenized before processing.
 
 TBD...
+
+## Connection to Embeddings
+
+Tokenization is the first step in the pipeline. Once text is split into tokens, those tokens are mapped to
+embeddings — numerical vectors that capture meaning. The flow is:
+**Raw text → Tokens → Vectors/Embeddings → Model processing**
 
 ## Tokenizer Libraries
 

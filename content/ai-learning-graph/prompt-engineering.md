@@ -16,5 +16,7 @@ different results depending on prompt structure, examples, and instructions.
 
 - **[[few-shot-learning]]** — providing examples in the prompt to guide behavior
 - **[[chain-of-thought]]** — asking the model to reason step-by-step before answering
+- **[[prompt-engineering-guides]]** — curated resources and guides for mastering prompt design
+- **[[context-engineering]]** — designing what information the model sees and when
 
 TBD...

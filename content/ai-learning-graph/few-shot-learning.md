@@ -2,8 +2,7 @@
 assignee: John Doe
 ---
 
-# Few-Shot Learning
-
+# Few-Shot Learning 
 Few-shot learning (in the context of language models) refers to providing a small number of examples directly in the
 prompt to guide the model's behavior — without any weight updates or fine-tuning.
 
