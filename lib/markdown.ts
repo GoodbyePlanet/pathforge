@@ -144,7 +144,7 @@ export async function buildGraphData(
     degreeCounts.set(edge.target, (degreeCounts.get(edge.target) ?? 0) + 1);
   }
 
-  // Assign cluster indices via BFS from highest-degree nodes
+  // Identify hubs: nodes with degree >= 2 (or all nodes if none qualify)
   const adjacency = new Map<string, string[]>();
   for (const node of nodes) {
     adjacency.set(node.id, []);
@@ -154,38 +154,73 @@ export async function buildGraphData(
     adjacency.get(edge.target)?.push(edge.source);
   }
 
-  const clusterMap = new Map<string, number>();
   const sortedByDegree = [...nodes]
     .sort((a, b) => (degreeCounts.get(b.id) ?? 0) - (degreeCounts.get(a.id) ?? 0));
 
-  let clusterIndex = 0;
-  for (const seed of sortedByDegree) {
-    if (clusterMap.has(seed.id)) continue;
+  // Hubs are nodes with degree >= 2 (i.e. connected to multiple nodes)
+  const hubs = sortedByDegree.filter((n) => (degreeCounts.get(n.id) ?? 0) >= 2);
+  const hubSet = new Set(hubs.map((h) => h.id));
 
-    const queue = [seed.id];
-    clusterMap.set(seed.id, clusterIndex);
+  // If no hubs found, treat all nodes as hubs
+  if (hubSet.size === 0) {
+    for (const node of nodes) {
+      hubSet.add(node.id);
+    }
+  }
 
-    while (queue.length > 0) {
-      const current = queue.shift()!;
-      for (const neighbor of adjacency.get(current) ?? []) {
-        if (!clusterMap.has(neighbor)) {
-          clusterMap.set(neighbor, clusterIndex);
-          queue.push(neighbor);
-        }
+  // Assign each hub a unique color index
+  const hubColorIndex = new Map<string, number>();
+  let colorIdx = 0;
+  for (const hub of hubs.length > 0 ? hubs : sortedByDegree) {
+    if (!hubColorIndex.has(hub.id)) {
+      hubColorIndex.set(hub.id, colorIdx++);
+    }
+  }
+  const totalHubs = Math.max(colorIdx, 1);
+
+  // Assign each non-hub node to its highest-degree neighbor (its color parent)
+  const nodeHubMap = new Map<string, string>();
+  for (const node of nodes) {
+    if (hubSet.has(node.id)) {
+      nodeHubMap.set(node.id, node.id);
+      continue;
+    }
+
+    const neighbors = adjacency.get(node.id) ?? [];
+    let bestHub: string | null = null;
+    let bestDegree = -1;
+    for (const neighbor of neighbors) {
+      const deg = degreeCounts.get(neighbor) ?? 0;
+      if (deg > bestDegree) {
+        bestDegree = deg;
+        bestHub = neighbor;
       }
     }
 
-    clusterIndex++;
+    // Walk up to find the nearest hub
+    if (bestHub && hubSet.has(bestHub)) {
+      nodeHubMap.set(node.id, bestHub);
+    } else if (bestHub) {
+      nodeHubMap.set(node.id, bestHub);
+    } else {
+      nodeHubMap.set(node.id, node.id);
+    }
   }
 
-  const enrichedNodes = nodes.map((node) => ({
-    ...node,
-    data: {
-      ...node.data,
-      degree: degreeCounts.get(node.id) ?? 0,
-      clusterIndex: clusterMap.get(node.id) ?? 0,
-    },
-  }));
+  const enrichedNodes = nodes.map((node) => {
+    const parentHub = nodeHubMap.get(node.id) ?? node.id;
+    const ci = hubColorIndex.get(parentHub) ?? hubColorIndex.get(node.id) ?? 0;
+    return {
+      ...node,
+      data: {
+        ...node.data,
+        degree: degreeCounts.get(node.id) ?? 0,
+        clusterIndex: ci,
+        totalClusters: totalHubs,
+        isHub: hubSet.has(node.id),
+      },
+    };
+  });
 
   return { nodes: enrichedNodes, edges };
 }

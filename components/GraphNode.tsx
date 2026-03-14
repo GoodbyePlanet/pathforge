@@ -16,19 +16,6 @@ const centerHandleStyle = {
   transform: 'translate(-50%, -50%)',
 };
 
-const CLUSTER_COLORS = [
-  { bg: '#fca5a5', border: '#f87171' }, // red
-  { bg: '#fdba74', border: '#fb923c' }, // orange
-  { bg: '#fde047', border: '#facc15' }, // yellow
-  { bg: '#86efac', border: '#4ade80' }, // green
-  { bg: '#67e8f9', border: '#22d3ee' }, // cyan
-  { bg: '#93c5fd', border: '#60a5fa' }, // blue
-  { bg: '#c4b5fd', border: '#a78bfa' }, // violet
-  { bg: '#f0abfc', border: '#e879f9' }, // fuchsia
-  { bg: '#fda4af', border: '#fb7185' }, // rose
-  { bg: '#a5f3fc', border: '#67e8f9' }, // teal
-];
-
 function hashString(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -43,44 +30,91 @@ function getNodeSize(degree: number): number {
   return base + Math.min(degree, 8) * scale;
 }
 
+type NodeColor = { bg: string; border: string };
+
+function getNodeColor(
+  id: string,
+  clusterIndex: number,
+  totalClusters: number,
+  isHub: boolean,
+): NodeColor {
+  // Evenly space hub hues around the color wheel
+  const baseHue = (clusterIndex / Math.max(totalClusters, 1)) * 360;
+
+  if (isHub) {
+    return {
+      bg: `hsl(${baseHue}, 70%, 72%)`,
+      border: `hsl(${baseHue}, 75%, 58%)`,
+    };
+  }
+
+  // Leaf: slight hue offset based on id, softer saturation, lighter
+  const hueOffset = (hashString(id) % 30) - 15; // -15 to +15 degrees
+  const leafHue = (baseHue + hueOffset + 360) % 360;
+
+  return {
+    bg: `hsl(${leafHue}, 55%, 82%)`,
+    border: `hsl(${leafHue}, 60%, 68%)`,
+  };
+}
+
 export function GraphNode({ id, data }: NodeProps) {
   const isSelected = data.isSelected as boolean | undefined;
   const isHighlighted = data.isHighlighted as boolean | undefined;
   const isDimmed = data.isDimmed as boolean | undefined;
   const degree = (data.degree as number) ?? 0;
   const clusterIndex = (data.clusterIndex as number) ?? 0;
+  const totalClusters = (data.totalClusters as number) ?? 1;
+  const isHub = (data.isHub as boolean) ?? false;
+  const zoom = (data.zoom as number) ?? 1;
   const [showTooltip, setShowTooltip] = useState(false);
 
   const size = useMemo(() => getNodeSize(degree), [degree]);
 
-  const color = useMemo(() => {
-    const index = hashString(id) % CLUSTER_COLORS.length;
-    return CLUSTER_COLORS[index];
-  }, [id]);
+  const color = useMemo(
+    () => getNodeColor(id, clusterIndex, totalClusters, isHub),
+    [id, clusterIndex, totalClusters, isHub],
+  );
 
   const dotStyle = useMemo(() => {
-    if (isSelected || isHighlighted) {
-      return {
-        backgroundColor: '#9ca3af',
-        borderColor: '#6b7280',
-        width: size,
-        height: size,
-      };
-    }
-    return {
+    const base = {
       backgroundColor: color.bg,
       borderColor: color.border,
       width: size,
       height: size,
+      transition: 'all 0.3s ease',
     };
+
+    if (isSelected) {
+      return {
+        ...base,
+        boxShadow: `0 0 12px 4px ${color.border}`,
+        transform: 'scale(1.15)',
+      };
+    }
+
+    if (isHighlighted) {
+      return {
+        ...base,
+        boxShadow: `0 0 8px 2px ${color.border}80`,
+      };
+    }
+
+    return base;
   }, [isSelected, isHighlighted, color, size]);
 
   const label = String(data.label);
 
+  const labelOpacity = useMemo(() => {
+    if (zoom < 0.4) return 0;
+    if (zoom < 0.7) return (isSelected || isHighlighted) ? 1 : 0;
+    return 1;
+  }, [zoom, isSelected, isHighlighted]);
+
   return (
     <div
       className={clsx(
-        'flex flex-col items-center cursor-pointer transition-opacity duration-200',
+        'flex flex-col items-center cursor-pointer transition-opacity duration-300',
         isDimmed && 'opacity-20',
       )}
       onMouseEnter={() => setShowTooltip(true)}
@@ -88,10 +122,7 @@ export function GraphNode({ id, data }: NodeProps) {
     >
       <div className='relative' style={{ width: size, height: size }}>
         <div
-          className={clsx(
-            'rounded-full border transition-colors duration-200',
-            isSelected && 'ring-2 ring-gray-400',
-          )}
+          className='rounded-full border'
           style={dotStyle}
         />
         <Handle type='target' position={Position.Top} style={centerHandleStyle} />
@@ -99,10 +130,11 @@ export function GraphNode({ id, data }: NodeProps) {
       </div>
       <span
         className={clsx(
-          'mt-1.5 whitespace-nowrap max-w-28 truncate text-center',
-          isSelected || isHighlighted ? 'text-gray-800 font-medium' : 'text-gray-500',
+          'mt-1.5 whitespace-nowrap max-w-28 truncate text-center transition-colors duration-300',
+          isSelected ? 'text-gray-900 font-semibold' :
+            isHighlighted ? 'text-gray-700 font-medium' : 'text-gray-500',
         )}
-        style={{ fontSize: '8px' }}
+        style={{ fontSize: '8px', opacity: labelOpacity, transition: 'opacity 0.3s ease, color 0.3s ease' }}
       >
         {label}
       </span>

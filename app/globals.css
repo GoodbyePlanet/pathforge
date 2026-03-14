@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Animated marching-ants effect for graph edges */
-.react-flow__edge-path {
+/* Animated marching-ants effect — only on connected edges */
+.react-flow__edge-path--active {
   stroke-dasharray: 6 3;
-  animation: marchingAnts 30s linear infinite;
+  animation: marchingAnts 20s linear infinite;
 }
 
 @keyframes marchingAnts {

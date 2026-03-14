@@ -1,5 +1,5 @@
 ---
-assignee: John Doe
+assignee: Nemanja Vasic
 ---
 
 # Model Context Protocol (MCP)

@@ -6,6 +6,8 @@ import {
   type EdgeProps,
 } from '@xyflow/react';
 
+import clsx from 'clsx';
+
 export function GraphEdge({
   id,
   sourceX,
@@ -18,6 +20,7 @@ export function GraphEdge({
   data,
 }: EdgeProps) {
   const [hovered, setHovered] = useState(false);
+  const isConnected = (data?.isConnected as boolean) ?? false;
 
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -29,6 +32,11 @@ export function GraphEdge({
   });
 
   const relationship = (data?.relationship as string) ?? 'Related';
+
+  const pathStyle = {
+    ...style,
+    transition: 'stroke 0.3s ease, stroke-width 0.3s ease, opacity 0.3s ease',
+  };
 
   return (
     <g
@@ -44,10 +52,13 @@ export function GraphEdge({
       />
       <path
         id={id}
-        className='react-flow__edge-path'
+        className={clsx(
+          'react-flow__edge-path',
+          isConnected && 'react-flow__edge-path--active',
+        )}
         d={edgePath}
         fill='none'
-        style={style}
+        style={pathStyle}
       />
       {hovered && (
         <foreignObject

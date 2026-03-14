@@ -7,6 +7,7 @@ import {
   BackgroundVariant,
   useNodesState,
   useReactFlow,
+  useViewport,
   ReactFlowProvider,
   type Node,
   type Edge,
@@ -43,13 +44,20 @@ type PopupState = {
   label: string;
   assignee?: string;
   position: { x: number; y: number };
+  placement: 'left' | 'right';
 };
 
 function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewProps) {
   const { flowToScreenPosition } = useReactFlow();
+  const { zoom: rawZoom } = useViewport();
   const [nodes, setNodes, onNodesChange] = useNodesState(rawNodes);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [popup, setPopup] = useState<PopupState | null>(null);
+
+  const quantizedZoom = useMemo(
+    () => Math.round(rawZoom * 10) / 10,
+    [rawZoom],
+  );
 
   const connectedIds = useMemo(() => {
     if (!selectedNodeId) return new Set<string>();
@@ -62,7 +70,7 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
     setNodes,
   );
 
-  // Apply selection/highlight data to nodes
+  // Apply selection/highlight data and zoom to nodes
   useEffect(() => {
     setNodes((currentNodes) =>
       currentNodes.map((node) => ({
@@ -74,10 +82,11 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
           isDimmed: selectedNodeId !== null
             && node.id !== selectedNodeId
             && !connectedIds.has(node.id),
+          zoom: quantizedZoom,
         },
       })),
     );
-  }, [selectedNodeId, connectedIds, setNodes]);
+  }, [selectedNodeId, connectedIds, quantizedZoom, setNodes]);
 
   const styledEdges = useMemo(() => {
     if (!selectedNodeId) return rawEdges;
@@ -85,6 +94,7 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
       const isConnected = edge.source === selectedNodeId || edge.target === selectedNodeId;
       return {
         ...edge,
+        data: { ...edge.data, isConnected },
         style: isConnected
           ? { stroke: '#6b7280', strokeWidth: 2 }
           : { stroke: '#d1d5db', strokeWidth: 1, opacity: 0.2 },
@@ -122,11 +132,21 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
         y: node.position.y,
       });
 
+      const container = document.querySelector('.react-flow');
+      const containerRect = container?.getBoundingClientRect();
+      const midX = containerRect
+        ? containerRect.left + containerRect.width / 2
+        : window.innerWidth / 2;
+
+      // Place popup on the side with more space
+      const placement = screenPos.x < midX ? 'right' : 'left';
+
       setPopup({
         nodeId: node.id,
         label: String(node.data.label),
         assignee: node.data.assignee as string | undefined,
-        position: { x: screenPos.x, y: screenPos.y + 20 },
+        position: { x: screenPos.x, y: screenPos.y },
+        placement,
       });
     },
     [selectedNodeId, flowToScreenPosition],
@@ -169,6 +189,7 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
           assignee={popup.assignee}
           href={`/${folder}/${popup.nodeId}`}
           position={popup.position}
+          placement={popup.placement}
           onClose={() => {
             setSelectedNodeId(null);
             setPopup(null);
