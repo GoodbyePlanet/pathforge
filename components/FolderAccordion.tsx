@@ -29,6 +29,22 @@ export function FolderAccordion({ folder, groups, standalone }: FolderAccordionP
 
   return (
     <ul className='space-y-2'>
+      {standalone.map((file) => (
+        <li key={file.slug}>
+          <Link
+            href={`/${folder}/${file.slug}`}
+            className='flex items-center p-4 rounded-lg border border-gray-200 bg-gray-50 hover:border-gray-400 hover:bg-gray-100 transition-colors group'
+          >
+            <span className='text-gray-700 group-hover:text-gray-900 font-medium'>
+              {file.title}
+            </span>
+            <span className='ml-auto text-xs text-gray-400 group-hover:text-gray-500'>
+              {file.slug}
+            </span>
+          </Link>
+        </li>
+      ))}
+
       {groups.map(({ hub, children }) => {
         const isOpen = openSlug === hub.slug;
 
@@ -93,22 +109,6 @@ export function FolderAccordion({ folder, groups, standalone }: FolderAccordionP
           </li>
         );
       })}
-
-      {standalone.map((file) => (
-        <li key={file.slug}>
-          <Link
-            href={`/${folder}/${file.slug}`}
-            className='flex items-center p-4 rounded-lg border border-gray-200 bg-gray-50 hover:border-gray-400 hover:bg-gray-100 transition-colors group'
-          >
-            <span className='text-gray-700 group-hover:text-gray-900 font-medium'>
-              {file.title}
-            </span>
-            <span className='ml-auto text-xs text-gray-400 group-hover:text-gray-500'>
-              {file.slug}
-            </span>
-          </Link>
-        </li>
-      ))}
     </ul>
   );
 }
