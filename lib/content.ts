@@ -19,18 +19,29 @@ function extractH1Title(markdown: string): string | null {
   return match ? match[1].trim() : null;
 }
 
+async function collectMarkdownFiles(dir: string): Promise<string[]> {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...await collectMarkdownFiles(fullPath));
+    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+}
+
 export async function getFilesInFolder(folder: string): Promise<FileEntry[]> {
   const folderPath = path.join(contentDir, folder);
-  const entries = await fs.readdir(folderPath, { withFileTypes: true });
-
-  const mdFiles = entries.filter(
-    (entry) => entry.isFile() && entry.name.endsWith('.md'),
-  );
+  const mdFilePaths = await collectMarkdownFiles(folderPath);
 
   const fileEntries = await Promise.all(
-    mdFiles.map(async (entry) => {
-      const slug = entry.name.replace(/\.md$/, '');
-      const filePath = path.join(folderPath, entry.name);
+    mdFilePaths.map(async (filePath) => {
+      const slug = path.basename(filePath, '.md');
       const raw = await fs.readFile(filePath, 'utf-8');
       const { data: frontmatter, content } = matter(raw);
       const title = extractH1Title(content) ?? slug;
@@ -45,6 +56,13 @@ export async function getFilesInFolder(folder: string): Promise<FileEntry[]> {
 }
 
 export async function getFileContent(folder: string, slug: string): Promise<string> {
-  const filePath = path.join(contentDir, folder, `${slug}.md`);
-  return fs.readFile(filePath, 'utf-8');
+  const folderPath = path.join(contentDir, folder);
+  const allFiles = await collectMarkdownFiles(folderPath);
+  const match = allFiles.find((f) => path.basename(f, '.md') === slug);
+
+  if (!match) {
+    throw new Error(`File not found: ${slug}.md in ${folder}`);
+  }
+
+  return fs.readFile(match, 'utf-8');
 }

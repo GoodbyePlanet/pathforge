@@ -1,5 +1,5 @@
 ---
-assignee: John Doe
+assignee: Nemanja Vasic
 ---
 
 # AI Agents
@@ -17,8 +17,10 @@ An AI Agent is application that calls LLM in a loop until it reaches termination
 
 - **[[memory-systems]]** — storing and retrieving information across steps
 - **[[model-context-protocol]]** — MCPs: a standard for connecting agents to external tools and data
+- **[[web-mcp]]** — Web MCP: exposing web-based tools and data sources to AI agents over a standardized
 - **[[human-in-the-loop]]** — keeping humans involved in agent decision-making
 - **[[google-adk]]** — Google's Agent Development Kit for building AI agents
+- **[[langchain]]** — framework for building applications powered by LLMs
 - **[[agent-learning]]** — teaching agents to learn from experience
 - **[[skills-and-agents-files]]** — Skills.md and Agents.md: open formats for guiding agents
 
