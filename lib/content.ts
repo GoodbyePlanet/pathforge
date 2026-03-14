@@ -5,6 +5,16 @@ import matter from 'gray-matter';
 
 export type FileEntry = { slug: string; title: string; path: string; assignee?: string };
 
+export type FolderGroup = {
+  hub: FileEntry;
+  children: FileEntry[];
+};
+
+export type HierarchicalFiles = {
+  groups: FolderGroup[];
+  standalone: FileEntry[];
+};
+
 const contentDir = path.join(process.cwd(), 'content');
 
 export async function getFolders(): Promise<string[]> {
@@ -53,6 +63,48 @@ export async function getFilesInFolder(folder: string): Promise<FileEntry[]> {
   );
 
   return fileEntries;
+}
+
+async function buildFileEntry(filePath: string): Promise<FileEntry> {
+  const slug = path.basename(filePath, '.md');
+  const raw = await fs.readFile(filePath, 'utf-8');
+  const { data: frontmatter, content } = matter(raw);
+  const title = extractH1Title(content) ?? slug;
+  const assignee = typeof frontmatter.assignee === 'string'
+    ? frontmatter.assignee
+    : undefined;
+  return { slug, title, path: filePath, assignee };
+}
+
+export async function getHierarchicalFiles(folder: string): Promise<HierarchicalFiles> {
+  const folderPath = path.join(contentDir, folder);
+  const entries = await fs.readdir(folderPath, { withFileTypes: true });
+
+  const subfolderNames = entries
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name);
+
+  const rootMdFiles = entries
+    .filter((e) => e.isFile() && e.name.endsWith('.md'))
+    .map((e) => path.join(folderPath, e.name));
+
+  const groups: FolderGroup[] = [];
+  const standalone: FileEntry[] = [];
+
+  for (const filePath of rootMdFiles) {
+    const slug = path.basename(filePath, '.md');
+    const hub = await buildFileEntry(filePath);
+
+    if (subfolderNames.includes(slug)) {
+      const childPaths = await collectMarkdownFiles(path.join(folderPath, slug));
+      const children = await Promise.all(childPaths.map(buildFileEntry));
+      groups.push({ hub, children });
+    } else {
+      standalone.push(hub);
+    }
+  }
+
+  return { groups, standalone };
 }
 
 export async function getFileContent(folder: string, slug: string): Promise<string> {

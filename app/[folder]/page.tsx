@@ -1,6 +1,8 @@
 import Link from 'next/link';
 
-import { getFilesInFolder } from '@/lib/content';
+import { getHierarchicalFiles } from '@/lib/content';
+
+import { FolderAccordion } from '@/components/FolderAccordion';
 
 function formatFolderName(folder: string): string {
   return folder
@@ -15,7 +17,7 @@ type Props = {
 
 export default async function FolderPage({ params }: Props) {
   const { folder } = await params;
-  const files = await getFilesInFolder(folder);
+  const { groups, standalone } = await getHierarchicalFiles(folder);
   const folderLabel = formatFolderName(folder);
 
   return (
@@ -38,23 +40,11 @@ export default async function FolderPage({ params }: Props) {
         </Link>
       </div>
 
-      <ul className='space-y-2'>
-        {files.map((file) => (
-          <li key={file.slug}>
-            <Link
-              href={`/${folder}/${file.slug}`}
-              className='flex items-center p-4 rounded-lg border border-gray-200 bg-gray-50 hover:border-gray-400 hover:bg-gray-100 transition-colors group'
-            >
-              <span className='text-gray-700 group-hover:text-gray-900 font-medium'>
-                {file.title}
-              </span>
-              <span className='ml-auto text-xs text-gray-400 group-hover:text-gray-500'>
-                {file.slug}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <FolderAccordion
+        folder={folder}
+        groups={groups}
+        standalone={standalone}
+      />
     </main>
   );
 }
