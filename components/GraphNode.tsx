@@ -39,26 +39,15 @@ function getNodeColor(
   isHub: boolean,
   status?: string,
 ): NodeColor {
-  // Evenly space hub hues around the color wheel
   const baseHue = (clusterIndex / Math.max(totalClusters, 1)) * 360;
 
-  let sat: number;
-  let light: number;
-  let borderSat: number;
-  let borderLight: number;
-
   if (isHub) {
-    sat = 70;
-    light = 72;
-    borderSat = 75;
-    borderLight = 58;
-  } else {
-    const hueOffset = (hashString(id) % 30) - 15;
-    const leafHue = (baseHue + hueOffset + 360) % 360;
-    return getDoneAdjusted(leafHue, 55, 82, 60, 68, status);
+    return getDoneAdjusted(baseHue, 70, 72, 75, 58, status);
   }
 
-  return getDoneAdjusted(baseHue, sat, light, borderSat, borderLight, status);
+  const hueOffset = (hashString(id) % 30) - 15;
+  const leafHue = (baseHue + hueOffset + 360) % 360;
+  return getDoneAdjusted(leafHue, 55, 82, 60, 68, status);
 }
 
 function getDoneAdjusted(
@@ -82,6 +71,46 @@ function getDoneAdjusted(
   };
 }
 
+// Shape definitions — polygon points normalized to a 100x100 viewBox
+type ShapeDef =
+  | { type: 'circle' }
+  | { type: 'polygon'; points: string };
+
+const SHAPES: ShapeDef[] = [
+  { type: 'circle' },
+  { type: 'polygon', points: '50,2 81,13 97,42 92,74 66,95 34,95 8,74 3,42 19,13' },
+  { type: 'polygon', points: '50,2 79,9 97,31 97,69 79,91 50,98 21,91 3,69 3,31 21,9' },
+];
+
+function getShape(clusterIndex: number): ShapeDef {
+  return SHAPES[clusterIndex % SHAPES.length];
+}
+
+function renderShapeSvg(
+  shape: ShapeDef,
+  fill: string,
+  stroke: string,
+  strokeWidth: number,
+  strokeDasharray?: string,
+  className?: string,
+) {
+  const common = { fill, stroke, strokeWidth, strokeDasharray };
+
+  if (shape.type === 'circle') {
+    return (
+      <svg viewBox="0 0 100 100" className={className}>
+        <circle cx="50" cy="50" r={50 - strokeWidth / 2} {...common} />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 100 100" className={className}>
+      <polygon points={shape.points} {...common} />
+    </svg>
+  );
+}
+
 export function GraphNode({ id, data }: NodeProps) {
   const isSelected = data.isSelected as boolean | undefined;
   const isHighlighted = data.isHighlighted as boolean | undefined;
@@ -101,32 +130,25 @@ export function GraphNode({ id, data }: NodeProps) {
     [id, clusterIndex, totalClusters, isHub, status],
   );
 
-  const dotStyle = useMemo(() => {
-    const base = {
-      backgroundColor: color.bg,
-      borderColor: color.border,
-      width: size,
-      height: size,
-      transition: 'all 0.3s ease',
-    };
+  const shape = useMemo(() => getShape(clusterIndex), [clusterIndex]);
 
+  const svgFilter = useMemo(() => {
     if (isSelected) {
-      return {
-        ...base,
-        boxShadow: `0 0 12px 4px ${color.border}`,
-        transform: 'scale(1.15)',
-      };
+      return `drop-shadow(0 0 6px ${color.border}) drop-shadow(0 0 12px ${color.border})`;
     }
-
     if (isHighlighted) {
-      return {
-        ...base,
-        boxShadow: `0 0 8px 2px ${color.border}80`,
-      };
+      return `drop-shadow(0 0 4px ${color.border}80)`;
     }
+    return undefined;
+  }, [isSelected, isHighlighted, color]);
 
-    return base;
-  }, [isSelected, isHighlighted, color, size]);
+  const svgStyle = useMemo(() => ({
+    width: size,
+    height: size,
+    transition: 'all 0.3s ease',
+    filter: svgFilter,
+    transform: isSelected ? 'scale(1.15)' : undefined,
+  }), [size, svgFilter, isSelected]);
 
   const label = String(data.label);
 
@@ -146,24 +168,28 @@ export function GraphNode({ id, data }: NodeProps) {
       onMouseLeave={() => setShowTooltip(false)}
     >
       <div className='relative' style={{ width: size, height: size }}>
-        <div
-          className='rounded-full border'
-          style={dotStyle}
-        />
+        <div style={svgStyle}>
+          {renderShapeSvg(shape, color.bg, color.border, 4)}
+        </div>
         {status === 'in-progress' && (
           <div
-            className='absolute inset-0 rounded-full animate-pulse-ring'
-            style={{ border: `2px solid ${color.border}` }}
-          />
+            className='absolute inset-0 animate-pulse-ring'
+            style={{ width: size, height: size }}
+          >
+            {renderShapeSvg(shape, 'none', color.border, 4)}
+          </div>
         )}
         {status === 'todo' && (
           <div
-            className='absolute rounded-full'
+            className='absolute'
             style={{
               inset: -4,
-              border: `2px dashed ${color.border}`,
+              width: size + 8,
+              height: size + 8,
             }}
-          />
+          >
+            {renderShapeSvg(shape, 'none', color.border, 2, '6 3')}
+          </div>
         )}
         <Handle type='target' position={Position.Top} style={centerHandleStyle} />
         <Handle type='source' position={Position.Bottom} style={centerHandleStyle} />
