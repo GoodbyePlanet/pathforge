@@ -1,5 +1,6 @@
 ---
-assignee: John Doe
+assignee: Pero Zdero
+status: todo
 ---
 
 # Skills.md and Agents.md

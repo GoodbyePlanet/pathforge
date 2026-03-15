@@ -3,7 +3,17 @@ import path from 'path';
 
 import matter from 'gray-matter';
 
-export type FileEntry = { slug: string; title: string; path: string; assignee?: string };
+export type NodeStatus = 'done' | 'in-progress' | 'todo';
+
+const validStatuses = new Set<NodeStatus>(['done', 'in-progress', 'todo']);
+
+export type FileEntry = {
+  slug: string;
+  title: string;
+  path: string;
+  assignee?: string;
+  status?: NodeStatus;
+};
 
 export type FolderGroup = {
   hub: FileEntry;
@@ -58,7 +68,10 @@ export async function getFilesInFolder(folder: string): Promise<FileEntry[]> {
       const assignee = typeof frontmatter.assignee === 'string'
         ? frontmatter.assignee
         : undefined;
-      return { slug, title, path: filePath, assignee };
+      const status = validStatuses.has(frontmatter.status)
+        ? frontmatter.status as NodeStatus
+        : undefined;
+      return { slug, title, path: filePath, assignee, status };
     }),
   );
 
@@ -73,7 +86,10 @@ async function buildFileEntry(filePath: string): Promise<FileEntry> {
   const assignee = typeof frontmatter.assignee === 'string'
     ? frontmatter.assignee
     : undefined;
-  return { slug, title, path: filePath, assignee };
+  const status = validStatuses.has(frontmatter.status)
+    ? frontmatter.status as NodeStatus
+    : undefined;
+  return { slug, title, path: filePath, assignee, status };
 }
 
 export async function getHierarchicalFiles(folder: string): Promise<HierarchicalFiles> {

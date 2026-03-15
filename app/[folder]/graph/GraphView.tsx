@@ -20,6 +20,7 @@ import { useForceLayout } from '@/lib/forceLayout';
 import { GraphNode } from '@/components/GraphNode';
 import { GraphEdge } from '@/components/GraphEdge';
 import { NodePopup } from '@/components/NodePopup';
+import { StatusLegend } from '@/components/StatusLegend';
 
 const nodeTypes = { graphNode: GraphNode };
 const edgeTypes = { graphEdge: GraphEdge };
@@ -43,6 +44,7 @@ type PopupState = {
   nodeId: string;
   label: string;
   assignee?: string;
+  status?: string;
   position: { x: number; y: number };
   placement: 'left' | 'right';
 };
@@ -145,6 +147,7 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
         nodeId: node.id,
         label: String(node.data.label),
         assignee: node.data.assignee as string | undefined,
+        status: node.data.status as string | undefined,
         position: { x: screenPos.x, y: screenPos.y },
         placement,
       });
@@ -187,6 +190,7 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
         <NodePopup
           label={popup.label}
           assignee={popup.assignee}
+          status={popup.status}
           href={`/${folder}/${popup.nodeId}`}
           position={popup.position}
           placement={popup.placement}
@@ -210,10 +214,11 @@ export function GraphView(props: GraphViewProps) {
   if (!mounted) return <div className='w-full h-full' />;
 
   return (
-    <div className='w-full h-full'>
+    <div className='relative w-full h-full'>
       <ReactFlowProvider>
         <GraphViewInner {...props} />
       </ReactFlowProvider>
+      <StatusLegend />
     </div>
   );
 }

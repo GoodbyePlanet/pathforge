@@ -37,24 +37,48 @@ function getNodeColor(
   clusterIndex: number,
   totalClusters: number,
   isHub: boolean,
+  status?: string,
 ): NodeColor {
   // Evenly space hub hues around the color wheel
   const baseHue = (clusterIndex / Math.max(totalClusters, 1)) * 360;
 
+  let sat: number;
+  let light: number;
+  let borderSat: number;
+  let borderLight: number;
+
   if (isHub) {
-    return {
-      bg: `hsl(${baseHue}, 70%, 72%)`,
-      border: `hsl(${baseHue}, 75%, 58%)`,
-    };
+    sat = 70;
+    light = 72;
+    borderSat = 75;
+    borderLight = 58;
+  } else {
+    const hueOffset = (hashString(id) % 30) - 15;
+    const leafHue = (baseHue + hueOffset + 360) % 360;
+    return getDoneAdjusted(leafHue, 55, 82, 60, 68, status);
   }
 
-  // Leaf: slight hue offset based on id, softer saturation, lighter
-  const hueOffset = (hashString(id) % 30) - 15; // -15 to +15 degrees
-  const leafHue = (baseHue + hueOffset + 360) % 360;
+  return getDoneAdjusted(baseHue, sat, light, borderSat, borderLight, status);
+}
+
+function getDoneAdjusted(
+  hue: number,
+  sat: number,
+  light: number,
+  borderSat: number,
+  borderLight: number,
+  status?: string,
+): NodeColor {
+  if (status === 'done') {
+    sat = Math.min(sat + 18, 100);
+    light = Math.max(light - 12, 0);
+    borderSat = Math.min(borderSat + 15, 100);
+    borderLight = Math.max(borderLight - 10, 0);
+  }
 
   return {
-    bg: `hsl(${leafHue}, 55%, 82%)`,
-    border: `hsl(${leafHue}, 60%, 68%)`,
+    bg: `hsl(${hue}, ${sat}%, ${light}%)`,
+    border: `hsl(${hue}, ${borderSat}%, ${borderLight}%)`,
   };
 }
 
@@ -66,14 +90,15 @@ export function GraphNode({ id, data }: NodeProps) {
   const clusterIndex = (data.clusterIndex as number) ?? 0;
   const totalClusters = (data.totalClusters as number) ?? 1;
   const isHub = (data.isHub as boolean) ?? false;
+  const status = data.status as string | undefined;
   const zoom = (data.zoom as number) ?? 1;
   const [showTooltip, setShowTooltip] = useState(false);
 
   const size = useMemo(() => getNodeSize(degree), [degree]);
 
   const color = useMemo(
-    () => getNodeColor(id, clusterIndex, totalClusters, isHub),
-    [id, clusterIndex, totalClusters, isHub],
+    () => getNodeColor(id, clusterIndex, totalClusters, isHub, status),
+    [id, clusterIndex, totalClusters, isHub, status],
   );
 
   const dotStyle = useMemo(() => {
@@ -125,6 +150,21 @@ export function GraphNode({ id, data }: NodeProps) {
           className='rounded-full border'
           style={dotStyle}
         />
+        {status === 'in-progress' && (
+          <div
+            className='absolute inset-0 rounded-full animate-pulse-ring'
+            style={{ border: `2px solid ${color.border}` }}
+          />
+        )}
+        {status === 'todo' && (
+          <div
+            className='absolute rounded-full'
+            style={{
+              inset: -4,
+              border: `2px dashed ${color.border}`,
+            }}
+          />
+        )}
         <Handle type='target' position={Position.Top} style={centerHandleStyle} />
         <Handle type='source' position={Position.Bottom} style={centerHandleStyle} />
       </div>

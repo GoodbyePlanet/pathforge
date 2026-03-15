@@ -1,5 +1,6 @@
 ---
-assignee: John Doe
+assignee: Pero Zdero
+status: in-progress
 ---
 
 # Using LLMs via API

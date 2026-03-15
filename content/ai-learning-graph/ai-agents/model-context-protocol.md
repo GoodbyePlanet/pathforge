@@ -1,5 +1,6 @@
 ---
 assignee: Nemanja Vasic
+status: todo
 ---
 
 # Model Context Protocol (MCP)

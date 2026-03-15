@@ -105,7 +105,7 @@ export async function buildGraphData(
   const nodes: Node[] = files.map((file) => ({
     id: file.slug,
     type: 'graphNode',
-    data: { label: file.title, assignee: file.assignee },
+    data: { label: file.title, assignee: file.assignee, status: file.status },
     position: { x: 0, y: 0 },
   }));
 

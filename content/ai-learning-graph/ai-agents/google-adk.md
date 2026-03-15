@@ -1,5 +1,6 @@
 ---
-assignee: John Doe
+assignee: Pero Zdero
+status: todo
 ---
 
 # Google ADK (Agent Development Kit)

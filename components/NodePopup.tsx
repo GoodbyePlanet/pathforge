@@ -5,15 +5,21 @@ import Link from 'next/link';
 type NodePopupProps = {
   label: string;
   assignee?: string;
+  status?: string;
   href: string;
   position: { x: number; y: number };
   placement?: 'left' | 'right';
   onClose: () => void;
 };
 
+function capitalizeStatus(status: string): string {
+  return status.charAt(0).toUpperCase() + status.slice(1);
+}
+
 export function NodePopup({
   label,
   assignee,
+  status,
   href,
   position,
   placement = 'right',
@@ -34,6 +40,11 @@ export function NodePopup({
         {assignee && (
           <p className='mt-1 text-xs text-gray-500'>
             Assignee: <span className='text-gray-700'>{assignee}</span>
+          </p>
+        )}
+        {status && (
+          <p className='mt-1 text-xs text-gray-500'>
+            Status: <span className='text-gray-700'>{capitalizeStatus(status)}</span>
           </p>
         )}
         <Link

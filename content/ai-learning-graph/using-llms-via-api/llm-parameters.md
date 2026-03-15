@@ -1,5 +1,6 @@
 ---
-assignee: John Doe
+assignee: Pero Zdero
+status: todo
 ---
 
 # LLM Parameters — Temperature and Top-P
