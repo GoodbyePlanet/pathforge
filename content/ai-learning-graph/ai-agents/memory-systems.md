@@ -9,6 +9,8 @@ status: todo
 Memory systems allow AI agents to store and retrieve information across steps, sessions, and conversations. 
 Without memory, every agent interaction starts from scratch.
 
+## The Problem
+
 ## Types of Memory
 
 **In-context memory** — information held in the context window for the current interaction.
@@ -22,3 +24,5 @@ Fast and immediately usable, but limited by context size and lost when the sessi
 **Episodic memory** — TBD...
 
 **Procedural memory** — TBD...
+
+## Benefits

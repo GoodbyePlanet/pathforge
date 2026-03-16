@@ -9,6 +9,8 @@ status: todo
 Context rot refers to the degradation of model performance as the context window fills up with
 outdated, irrelevant, or conflicting information over the course of a long interaction.
 
+## The Problem
+
 ## Why It Happens
 
 - Earlier parts of the conversation may contradict later corrections
@@ -24,3 +26,5 @@ outdated, irrelevant, or conflicting information over the course of a long inter
 - Start fresh conversations for new topics
 
 TBD...
+
+## Benefits

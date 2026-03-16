@@ -10,8 +10,12 @@ The Responses API is OpenAI's newer API format for interacting with their models
 richer interactions including tool use, structured outputs, and multi-turn conversations with
 built-in state management.
 
+## The Problem
+
 ## Reference
 
 - API Documentation: https://developers.openai.com/api/reference/resources/responses
 
 TBD...
+
+## Benefits

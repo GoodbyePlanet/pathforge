@@ -9,6 +9,8 @@ status: todo
 The context window is the maximum number of tokens a language model can process in a single interaction —
 including both input and output. It defines the model's "working memory" for a given request.
 
+## The Problem
+
 ## Why It Matters
 
 Everything the model knows during a conversation must fit in the context window. If your prompt, conversation history,
@@ -30,3 +32,5 @@ Larger context windows allow more information per request but increase cost and 
 - Embeddings and RAG help work around context limits by retrieving only relevant information
 
 TBD...
+
+## Benefits

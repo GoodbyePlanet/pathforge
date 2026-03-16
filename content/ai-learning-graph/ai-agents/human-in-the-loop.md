@@ -10,6 +10,8 @@ Human-in-the-loop (HITL) is a design pattern where human oversight is built into
 decision-making process. The agent pauses at critical points to get human approval, correction,
 or input before proceeding.
 
+## The Problem
+
 ## Why It Matters
 
 Fully autonomous agents can make mistakes with real consequences. HITL provides a safety net by keeping
@@ -30,3 +32,5 @@ humans involved in high-stakes decisions while still leveraging AI for speed and
 - **Interactive refinement** — human and agent collaborate iteratively
 
 TBD...
+
+## Benefits

@@ -9,6 +9,8 @@ status: todo
 Tokenization is the process of converting raw text into a sequence of tokens — the discrete units that language
 models operate on. Every piece of text you send to a model gets tokenized before processing.
 
+## The Problem
+
 TBD...
 
 ## Connection to Embeddings
@@ -21,3 +23,5 @@ embeddings — numerical vectors that capture meaning. The flow is:
 
 `tiktoken` (OpenAI), `tokenizers` (HuggingFace), and model-specific tokenizers each produce different token splits
 for the same text.
+
+## Benefits

@@ -10,6 +10,8 @@ Tokens are the fundamental units that language models read and generate. They're
 a word, part of a word, a punctuation mark, or even a space. Understanding tokens is essential because they directly
 affect cost, speed, and capability of LLM interactions.
 
+## The Problem
+
 ## Why Everyone Is Talking About Tokens
 
 Tokens are the currency of LLMs. You pay per token, your context window is measured in tokens, and the model
@@ -36,3 +38,5 @@ The tokenization process is what converts raw text into these tokens. Different 
 so the same text may produce different token counts across models.
 
 TBD...
+
+## Benefits

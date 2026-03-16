@@ -9,4 +9,8 @@ status: todo
 Learning through trial and error to maximize a reward.
 This is how robots learn to walk or how AI beats world-class gamers.
 
+## The Problem
+
 TDB...
+
+## Benefits

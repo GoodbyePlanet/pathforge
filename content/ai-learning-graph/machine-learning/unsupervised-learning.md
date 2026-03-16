@@ -9,4 +9,8 @@ status: todo
 Unsupervised learning finds structure in data without labeled examples. The model discovers patterns, groupings,
 or representations on its own.
 
+## The Problem
+
 TBD
+
+## Benefits

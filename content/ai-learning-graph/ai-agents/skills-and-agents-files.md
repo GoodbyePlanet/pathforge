@@ -9,6 +9,8 @@ status: todo
 Skills.md and Agents.md are emerging open formats for providing structured guidance to AI agents —
 defining what an agent can do, how it should behave, and what skills it has available.
 
+## The Problem
+
 ## The Idea
 
 Instead of embedding all agent instructions in code, these files provide a declarative, human-readable
@@ -26,3 +28,5 @@ Defines an agent's identity, behavior guidelines, constraints, and goals in a st
 that the agent reads and follows.
 
 TBD...
+
+## Benefits

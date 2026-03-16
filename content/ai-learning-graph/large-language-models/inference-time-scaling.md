@@ -10,6 +10,8 @@ Inference-time scaling is the idea that giving a model more compute at inference
 improves its performance — especially on reasoning tasks. Instead of just training bigger models,
 you can make existing models smarter by letting them "think longer."
 
+## The Problem
+
 ## Why It Matters for Reasoning Models
 
 Reasoning models like OpenAI o1/o3 use inference-time scaling by generating long internal
@@ -31,3 +33,5 @@ This is why reasoning models are slower and more expensive per query — they're
 more compute to get better results.
 
 TBD...
+
+## Benefits

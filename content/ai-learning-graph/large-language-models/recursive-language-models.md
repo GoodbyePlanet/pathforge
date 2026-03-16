@@ -10,4 +10,8 @@ Recursive Language Models are an emerging approach where the model applies itsel
 using its own output as input for further processing, enabling iterative refinement and
 deeper reasoning.
 
+## The Problem
+
 TBD...
+
+## Benefits

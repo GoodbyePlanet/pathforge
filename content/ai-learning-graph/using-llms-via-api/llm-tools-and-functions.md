@@ -9,6 +9,8 @@ status: todo
 Tool use (also called function calling) allows an LLM to invoke external functions or APIs as part of
 generating a response. Instead of just producing text, the model can take actions in the real world.
 
+## The Problem
+
 ## How It Works
 
 1. **Define tools** — you provide the model with a list of available tools, each with a name,
@@ -45,3 +47,5 @@ Tools transform LLMs from text generators into agents that can:
 This is a key building block for AI agents.
 
 TBD...
+
+## Benefits

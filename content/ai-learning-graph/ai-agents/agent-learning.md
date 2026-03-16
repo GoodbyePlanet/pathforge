@@ -9,6 +9,8 @@ status: todo
 An important frontier in AI agent development is enabling agents to improve their behavior over time
 based on past successes and failures — without retraining the underlying model.
 
+## The Problem
+
 ## Approaches
 
 - **Experience logs** — storing past actions and outcomes for future reference
@@ -18,3 +20,5 @@ based on past successes and failures — without retraining the underlying model
 - **Memory systems** — using persistent memory to retain learned patterns across sessions
 
 TBD...
+
+## Benefits

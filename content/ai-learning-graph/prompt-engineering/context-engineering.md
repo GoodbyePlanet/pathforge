@@ -9,6 +9,8 @@ status: todo
 Context engineering is the practice of deliberately designing what information a language model receives
 in its context window — what goes in, what stays out, and in what order.
 
+## The Problem
+
 ## Why It Matters
 
 A model's output quality depends heavily on the context it receives. Prompt engineering focuses on
@@ -31,3 +33,5 @@ A model's output quality depends heavily on the context it receives. Prompt engi
 - Pruning outdated or irrelevant conversation history
 
 TBD...
+
+## Benefits

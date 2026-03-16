@@ -9,6 +9,8 @@ status: todo
 A RAG Agent combines RAG retrieval with agentic behavior — the agent decides
 when and what to retrieve, can refine queries, and iterates until it has enough information to answer.
 
+## The Problem
+
 ## How It Differs from Basic RAG
 
 In basic RAG, retrieval happens once. A RAG agent can:
@@ -23,3 +25,5 @@ In basic RAG, retrieval happens once. A RAG agent can:
 - Google ADK RAG Agent example: https://github.com/google/adk-samples/tree/main/python/agents/RAG
 
 TBD...
+
+## Benefits

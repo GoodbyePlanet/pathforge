@@ -9,6 +9,8 @@ status: todo
 Not all language models are built the same. Different architectures and training approaches produce models
 suited for different tasks. Understanding the landscape helps you pick the right model for each use case.
 
+## The Problem
+
 ## Reasoning Models
 
 Models specifically trained or prompted to perform step-by-step reasoning before answering.
@@ -41,3 +43,5 @@ Examples: GPT-4o (text + image + audio), Gemini (text + image + audio + video), 
 - **High-throughput, low-latency needs** → smaller, faster models (e.g., Haiku, Flash)
 
 TBD...
+
+## Benefits

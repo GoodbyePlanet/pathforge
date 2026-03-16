@@ -9,6 +9,8 @@ status: todo
 When calling an LLM via API, you can control the randomness and creativity of the output
 using sampling parameters. The two most important are temperature and top-p.
 
+## The Problem
+
 ## Temperature
 
 Controls randomness. Ranges from 0 to 2 (typically).
@@ -38,3 +40,5 @@ Using both aggressively can produce unpredictable results.
 - **frequency_penalty / presence_penalty** — reduce repetition
 
 TBD...
+
+## Benefits

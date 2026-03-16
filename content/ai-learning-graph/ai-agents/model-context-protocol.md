@@ -10,6 +10,8 @@ MCP is an open standard for connecting AI agents and LLM applications to externa
 and services. It provides a standardized way for models to discover and use tools without custom
 integration code for each one.
 
+## The Problem
+
 ## The Core Idea
 
 Instead of building custom tool integrations for every service, MCP defines a protocol that any tool
@@ -21,3 +23,5 @@ MCP extends the tool use capability of LLMs by providing a standard
 for tool discovery and invocation. AI agents use MCP to connect to external systems dynamically.
 
 TBD...
+
+## Benefits

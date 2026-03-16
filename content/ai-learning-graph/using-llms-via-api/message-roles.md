@@ -9,6 +9,8 @@ status: todo
 LLM APIs structure conversations as a list of messages, each with a role. This structure tells the model
 who said what and how to interpret each piece of the conversation.
 
+## The Problem
+
 ## Common Roles
 
 **System** — sets the model's behavior, personality, and constraints. Processed first, acts as persistent instructions.
@@ -37,3 +39,5 @@ The model treats each role differently. System messages carry more weight for be
 The order and structure of messages directly affects response quality.
 
 TBD...
+
+## Benefits

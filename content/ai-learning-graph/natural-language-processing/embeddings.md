@@ -10,6 +10,8 @@ Embeddings are numerical representations (vectors) of data — text, images, or 
 vector space. Similar items end up close together in this space, enabling machines to reason about meaning
 mathematically.
 
+## The Problem
+
 ## What Is a Vector?
 
 A vector is simply an array of numbers (e.g., `[0.12, -0.34, 0.56, ...]`). In the context of AI, vectors represent
@@ -27,3 +29,5 @@ Text must be tokenized before it can be embedded. The tokenizer breaks text into
 and the embedding model maps those tokens (or sequences of tokens) into vector space.
 
 TBD...
+
+## Benefits

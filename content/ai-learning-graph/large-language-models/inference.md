@@ -9,6 +9,8 @@ status: todo
 An inference call is the act of sending input to a trained model and getting a response back.
 It's the "using" phase of a model — as opposed to training, which is the "learning" phase.
 
+## The Problem
+
 ## What Happens During Inference
 
 1. Your input text is tokenized into tokens
@@ -30,3 +32,5 @@ Every API call to an LLM is an inference call. Understanding inference helps you
 **Inference** = running the trained model on new inputs (cheaper per call, done millions of times).
 
 TBD...
+
+## Benefits

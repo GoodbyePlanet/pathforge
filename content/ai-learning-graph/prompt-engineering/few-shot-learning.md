@@ -8,6 +8,8 @@ status: todo
 Few-shot learning (in the context of language models) refers to providing a small number of examples directly in the
 prompt to guide the model's behavior — without any weight updates or fine-tuning.
 
+## The Problem
+
 ## Variants
 
 - **Zero-shot** — no examples; just instructions ("Classify this review as positive or negative.")
@@ -29,3 +31,5 @@ A few examples activate the relevant "program" in the model's learned distributi
 
 Few-shot prompting uses context window space. With chain-of-thought reasoning, each example becomes much longer.
 At some point, fine-tuning on examples is more token-efficient than few-shot prompting.
+
+## Benefits
