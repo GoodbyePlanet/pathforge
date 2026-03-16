@@ -1,7 +1,7 @@
 ---
 title: "RAG (Retrieval-Augmented Generation)"
-assignee: Pero Zdero
-status: in-progress
+assignee: Nemanja Vasic
+status: done
 ---
 
 # RAG (Retrieval-Augmented Generation)
@@ -15,6 +15,3 @@ the model learned during training, RAG gives it access to up-to-date, domain-spe
 - **[[what-is-rag]]** — RAG fundamentals and how the pattern works
 - **[[rag-reranking]]** — improving retrieval quality by reranking results
 - **[[contextual-retrieval]]** — adding context to chunks for better retrieval accuracy
-- **[[rag-agent]]** — combining RAG with agentic behavior for dynamic retrieval
-
-TBD...
