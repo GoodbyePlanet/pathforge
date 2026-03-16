@@ -4,6 +4,8 @@ assignee: Nemanja Vasic
 status: done
 ---
 
+# RAG Reranking
+
 ## The problem
 
 Most embedding models used to create embeddings are bi-encoders. Bi-encoders embed documents independently,

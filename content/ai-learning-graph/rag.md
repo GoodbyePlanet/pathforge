@@ -13,5 +13,7 @@ the model learned during training, RAG gives it access to up-to-date, domain-spe
 ## Key Topics
 
 - **[[what-is-rag]]** — RAG fundamentals and how the pattern works
-- **[[rag-reranking]]** — improving retrieval quality by reranking results
-- **[[contextual-retrieval]]** — adding context to chunks for better retrieval accuracy
+- **[[rag-reranking]]** — Improving retrieval quality by reranking results
+- **[[contextual-retrieval]]** — Adding context to chunks for better retrieval accuracy
+- **[[agentic-rag]]** — A dynamic system that replaces linear "Retrieve-then-Generate" pipelines with an 
+iterative agent loop

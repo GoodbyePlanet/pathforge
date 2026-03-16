@@ -6,7 +6,7 @@ status: in-progress
 
 # AI Agents
 
-An AI Agent is application that calls LLM in a loop until it reaches termination criteria.
+An AI Agent is an application that calls LLM in a loop until it reaches termination criteria.
 
 ## The Agent Loop
 
@@ -25,5 +25,3 @@ An AI Agent is application that calls LLM in a loop until it reaches termination
 - **[[langchain]]** — framework for building applications powered by LLMs
 - **[[agent-learning]]** — teaching agents to learn from experience
 - **[[skills-and-agents-files]]** — Skills.md and Agents.md: open formats for guiding agents
-
-TBD...
