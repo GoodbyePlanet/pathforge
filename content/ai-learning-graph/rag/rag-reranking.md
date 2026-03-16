@@ -1,30 +1,63 @@
 ---
-assignee: Pero Zdero
-status: in-progress
+assignee: Nemanja Vasic
+status: done
 ---
 
 # RAG Reranking
 
-Reranking is a second-pass step in a RAG pipeline that re-scores retrieved documents
-to improve relevance before they're sent to the LLM.
+## The problem
 
-## Why Reranking Matters
+Most embedding models used to create embeddings are bi-encoders. Bi-encoders embed documents independently,
+without knowing the user’s query. As a result, retrieval is fast, but important query-specific details may not
+be emphasized in the embedding, which can reduce retrieval accuracy. When searching a vector database, this can cause
+relevant documents to be ranked lower or missed entirely.
 
-Initial retrieval (e.g., vector similarity search) is fast but imprecise. A reranker uses a more
-powerful model to evaluate how well each retrieved chunk actually answers the query, promoting
-the most relevant results to the top.
+## RAG Reranking
 
-## How It Works
+To address this gap between fast retrieval and good accuracy, modern RAG systems introduce a reranking step,
+where a smaller set of retrieved documents is re-evaluated using more accurate models that apply deeper,
+query-aware reasoning.
 
-1. Retrieve top-K candidates using fast search (embeddings / BM25)
-2. Pass each candidate + the query through a reranking model
-3. Re-sort by the reranker's relevance score
-4. Send the top-N reranked results to the LLM
+RAG re-ranking is the process of re-ordering retrieved documents using a more accurate relevance model so the LLM
+sees the best possible context. Let’s break it down.
 
-## Common Reranking Approaches
+There are two steps:
 
-- **Cross-encoder models** — score query-document pairs jointly (e.g., Cohere Rerank, BGE Reranker)
-- **LLM-based reranking** — use an LLM to judge relevance
-- **Reciprocal Rank Fusion (RRF)** — combine rankings from multiple retrievers
+1. Retrieval: Is the process of finding relevant documents using, e.g., similarity search. This will return e.g. 50
+possible candidate documents.
 
-TBD...
+2. Re-ranking: Reranker will then take a user query into consideration and re-order (filter) most relevant documents.
+(top N candidates)
+
+### Types of reranking models:
+
+**cross-encoder** - An AI model that receives an input in the form of data pair (query and document pair or two sentences)
+and processes them together in a single pass*, producing a highly accurate relevance score. We use this score to reorder
+retrieved documents by relevance to our query.
+
+**LLM-based re-ranking** - The LLM (like GPT 5.1) itself scores or orders documents.
+
+**Hybrid / metadata-aware re-ranking** - Pure semantic re-ranking only measures meaning, but real-world relevance depends
+on more than semantics. Factors like recency, source trust, exact keyword matches, and document quality also matter. 
+Hybrid (metadata-aware) reranking combines these signals into a weighted score to produce better rankings.
+
+Examples:
+
+A newer document may be better than an older one.
+
+An official source may be better than a random blog.
+
+A document that mentions exact keywords may be more useful.
+
+A short, precise chunk may be better than a long one.
+
+So instead of relying on one score, we combine multiple signals. That’s hybrid / metadata-aware reranking.
+
+Semantic relevance (reranker score), Keyword relevance (exact match), Recency, source trust, popularity.
+Final ranking = weighted combination.
+
+## Benefits
+
+RAG reranking bridges the gap between fast retrieval and high accuracy by using query-aware models to ensure the most
+relevant context is prioritized for the LLM. By re-ordering initial search results based on deeper reasoning or metadata
+like recency and source trust, it significantly reduces noise and improves the quality of the final generated answer.
