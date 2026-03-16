@@ -123,7 +123,15 @@ export async function getHierarchicalFiles(folder: string): Promise<Hierarchical
   return { groups, standalone };
 }
 
-export async function getFileContent(folder: string, slug: string): Promise<string> {
+export type FileContent = {
+  content: string;
+  contentSubpath: string;
+  title: string;
+  assignee?: string;
+  status?: NodeStatus;
+};
+
+export async function getFileContent(folder: string, slug: string): Promise<FileContent> {
   const folderPath = path.join(contentDir, folder);
   const allFiles = await collectMarkdownFiles(folderPath);
   const match = allFiles.find((f) => path.basename(f, '.md') === slug);
@@ -132,5 +140,18 @@ export async function getFileContent(folder: string, slug: string): Promise<stri
     throw new Error(`File not found: ${slug}.md in ${folder}`);
   }
 
-  return fs.readFile(match, 'utf-8');
+  const raw = await fs.readFile(match, 'utf-8');
+  const { data: frontmatter, content } = matter(raw);
+  const contentSubpath = path.relative(contentDir, path.dirname(match));
+  const title = typeof frontmatter.title === 'string'
+    ? frontmatter.title
+    : extractH1Title(content) ?? slug;
+  const assignee = typeof frontmatter.assignee === 'string'
+    ? frontmatter.assignee
+    : undefined;
+  const status = validStatuses.has(frontmatter.status)
+    ? frontmatter.status as NodeStatus
+    : undefined;
+
+  return { content, contentSubpath, title, assignee, status };
 }

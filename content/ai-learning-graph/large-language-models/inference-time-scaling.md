@@ -1,4 +1,5 @@
 ---
+title: "Inference-Time Scaling"
 assignee: Pero Zdero
 status: todo
 ---

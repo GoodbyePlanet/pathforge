@@ -1,4 +1,5 @@
 ---
+title: "RAG Agent"
 assignee: Pero Zdero
 status: todo
 ---

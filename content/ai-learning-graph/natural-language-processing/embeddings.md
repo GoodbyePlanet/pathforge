@@ -1,4 +1,5 @@
 ---
+title: "Vectors and Embeddings"
 assignee: Pero Zdero
 status: todo
 ---

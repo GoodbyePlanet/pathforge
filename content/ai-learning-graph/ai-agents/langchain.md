@@ -1,4 +1,5 @@
 ---
+title: "LangChain"
 assignee: Nemanja Vasic
 status: todo
 ---

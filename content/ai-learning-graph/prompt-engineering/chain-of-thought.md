@@ -1,4 +1,5 @@
 ---
+title: "Chain of Thought"
 assignee: Pero Zdero
 status: todo
 ---

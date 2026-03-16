@@ -1,4 +1,5 @@
 ---
+title: "Context Engineering"
 assignee: Pero Zdero
 status: todo
 ---

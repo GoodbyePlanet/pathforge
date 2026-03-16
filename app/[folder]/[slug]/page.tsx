@@ -24,7 +24,8 @@ type Props = {
 
 export default async function SlugPage({ params }: Props) {
   const { folder, slug } = await params;
-  const rawContent = await getFileContent(folder, slug);
+  const fileContent = await getFileContent(folder, slug);
+  const { content: rawContent, contentSubpath, title, assignee, status } = fileContent;
   const content = preprocessWikiLinks(rawContent, folder);
   const folderLabel = formatFolderName(folder);
 
@@ -58,6 +59,14 @@ export default async function SlugPage({ params }: Props) {
         </Link>
       </div>
 
+      <header className='mb-8'>
+        <h1 className='text-2xl font-bold text-gray-900 mb-2'>{title}</h1>
+        <div className='text-sm text-gray-500'>
+          {assignee && <p>Assignee: {assignee}</p>}
+          {status && <p>Status: {status}</p>}
+        </div>
+      </header>
+
       <article className='prose prose-gray max-w-none'>
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
@@ -71,9 +80,7 @@ export default async function SlugPage({ params }: Props) {
                 {children}
               </a>
             ),
-            h1: ({ children }) => (
-              <h1 className='text-2xl font-bold text-gray-900 mb-4'>{children}</h1>
-            ),
+            h1: () => null,
             h2: ({ children }) => (
               <h2 className='text-xl font-semibold text-gray-800 mt-6 mb-3'>{children}</h2>
             ),
@@ -110,6 +117,21 @@ export default async function SlugPage({ params }: Props) {
                 {children}
               </blockquote>
             ),
+            img: ({ src, alt, ...rest }) => {
+              const imgSrc = typeof src === 'string' ? src : undefined;
+              const resolvedSrc = imgSrc && !imgSrc.startsWith('http') && !imgSrc.startsWith('/')
+                ? `/api/content-image/${contentSubpath}/${imgSrc}`
+                : imgSrc;
+              return (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={resolvedSrc}
+                  alt={alt ?? ''}
+                  className='rounded-md my-4 max-w-full'
+                  {...rest}
+                />
+              );
+            },
           }}
         >
           {content}

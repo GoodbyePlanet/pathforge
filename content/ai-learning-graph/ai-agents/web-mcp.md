@@ -1,4 +1,5 @@
 ---
+title: "Web MCPs"
 assignee: Nemanja Vasic
 status: todo
 ---

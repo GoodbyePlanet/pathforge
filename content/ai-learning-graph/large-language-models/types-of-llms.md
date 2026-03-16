@@ -1,4 +1,5 @@
 ---
+title: "Types of LLMs"
 assignee: Pero Zdero
 status: todo
 ---

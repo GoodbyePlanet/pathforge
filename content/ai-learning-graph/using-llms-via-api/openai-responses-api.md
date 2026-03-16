@@ -1,4 +1,5 @@
 ---
+title: "OpenAI Responses API"
 assignee: Pero Zdero
 status: todo
 ---

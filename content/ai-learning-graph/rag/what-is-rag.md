@@ -1,4 +1,5 @@
 ---
+title: "What Is RAG"
 assignee: Nemanja Vasic
 status: done
 ---
@@ -10,12 +11,14 @@ status: done
 LLMs have knowledge cutoff dates that prevent them from accessing information or events occurring after their
 training period ended.
 
-## RAG
+## RAG (Retrieval-Augmented Generation)
 
-RAG (Retrieval-Augmented Generation) is a technique that addresses the limitation of LLMs not having domain-specific or
+RAG is a technique that addresses the limitation of LLMs not having domain-specific or
 up-to-date knowledge by augmenting the model’s responses with relevant information retrieved from an external data source.
 
-In a traditional RAG system that uses bi-encoders for Indexing (Ingestion Phase) as well as for Retrieval (Query Phase).
+![traditional-rag-system.png](traditional-rag-system.png)
+
+This is a traditional RAG system that uses bi-encoders for Indexing (Ingestion Phase) as well as for Retrieval (Query Phase).
 To ensure that each vector represents a small, focused piece of information, we split the documents into smaller chunks
 and embed them individually. We do this because it is important for the Retrieval Phase, when we have a user query,
 the whole document might be relevant overall, but only one paragraph can actually answer the question. We don’t want

@@ -1,4 +1,5 @@
 ---
+title: "RAG (Retrieval-Augmented Generation)"
 assignee: Pero Zdero
 status: in-progress
 ---

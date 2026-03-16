@@ -1,4 +1,5 @@
 ---
+title: "LLM Parameters — Temperature and Top-P"
 assignee: Pero Zdero
 status: todo
 ---

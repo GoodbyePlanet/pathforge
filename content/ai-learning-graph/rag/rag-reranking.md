@@ -1,9 +1,8 @@
 ---
+title: "RAG Reranking"
 assignee: Nemanja Vasic
 status: done
 ---
-
-# RAG Reranking
 
 ## The problem
 

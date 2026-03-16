@@ -1,4 +1,5 @@
 ---
+title: "Supervised Learning (SL)"
 assignee: Pero Zdero
 status: todo
 ---

@@ -1,4 +1,5 @@
 ---
+title: "Skills.md and Agents.md"
 assignee: Pero Zdero
 status: todo
 ---

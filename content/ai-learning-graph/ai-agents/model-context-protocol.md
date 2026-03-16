@@ -1,4 +1,5 @@
 ---
+title: "Model Context Protocol (MCP)"
 assignee: Nemanja Vasic
 status: todo
 ---
