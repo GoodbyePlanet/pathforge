@@ -1,6 +1,6 @@
 ---
 title: "Chain of Thought"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

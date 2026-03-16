@@ -1,6 +1,6 @@
 ---
 title: "Google ADK (Agent Development Kit)"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

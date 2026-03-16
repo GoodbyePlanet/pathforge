@@ -1,6 +1,6 @@
 ---
 title: "Large Language Models"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

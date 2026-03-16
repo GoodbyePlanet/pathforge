@@ -1,6 +1,6 @@
 ---
 title: "Recursive Language Models (RLMs)"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

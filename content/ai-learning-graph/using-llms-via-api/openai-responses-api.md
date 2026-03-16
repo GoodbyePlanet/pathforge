@@ -1,6 +1,6 @@
 ---
 title: "OpenAI Responses API"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

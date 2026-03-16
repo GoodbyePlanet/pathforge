@@ -1,6 +1,6 @@
 ---
 title: "Message Roles and Structure"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

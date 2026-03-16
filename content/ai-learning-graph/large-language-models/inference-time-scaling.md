@@ -1,6 +1,6 @@
 ---
 title: "Inference-Time Scaling"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

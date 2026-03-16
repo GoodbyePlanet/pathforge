@@ -1,6 +1,6 @@
 ---
 title: "Few-Shot Learning"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

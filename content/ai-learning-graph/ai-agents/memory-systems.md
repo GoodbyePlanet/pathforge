@@ -1,6 +1,6 @@
 ---
 title: "Memory Systems"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Types of LLMs"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

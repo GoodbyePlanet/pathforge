@@ -1,6 +1,6 @@
 ---
 title: "LLM Parameters — Temperature and Top-P"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

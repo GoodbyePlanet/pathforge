@@ -1,6 +1,6 @@
 ---
 title: "Skills.md and Agents.md"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Vectors and Embeddings"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Reinforcement Learning (RL)"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 

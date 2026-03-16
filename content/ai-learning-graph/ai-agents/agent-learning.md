@@ -1,6 +1,6 @@
 ---
 title: "Teaching Agents to Learn from Experience"
-assignee: Pero Zdero
+assignee: Agent Mason
 status: todo
 ---
 
