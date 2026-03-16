@@ -67,8 +67,8 @@ function LegendDot({ type }: { type: 'done' | 'in-progress' | 'todo' }) {
 export function StatusLegend() {
   return (
     <div
-      className='absolute top-3 right-3 z-30 bg-white/90 backdrop-blur-sm
-        rounded-lg border border-gray-200 px-3 py-2 shadow-sm'
+      className='bg-white/90 backdrop-blur-sm rounded-lg border
+        border-gray-200 px-3 py-2 shadow-sm'
     >
       <p className='text-[10px] font-medium text-gray-500 mb-1.5'>Status</p>
       <div className='flex flex-col gap-1.5'>

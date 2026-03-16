@@ -21,6 +21,7 @@ import { GraphNode } from '@/components/GraphNode';
 import { GraphEdge } from '@/components/GraphEdge';
 import { NodePopup } from '@/components/NodePopup';
 import { StatusLegend } from '@/components/StatusLegend';
+import { ContributorsLegend } from '@/components/ContributorsLegend';
 
 const nodeTypes = { graphNode: GraphNode };
 const edgeTypes = { graphEdge: GraphEdge };
@@ -218,7 +219,10 @@ export function GraphView(props: GraphViewProps) {
       <ReactFlowProvider>
         <GraphViewInner {...props} />
       </ReactFlowProvider>
-      <StatusLegend />
+      <div className='absolute top-3 right-3 z-30 flex flex-col gap-2'>
+        <StatusLegend />
+        <ContributorsLegend nodes={props.nodes} />
+      </div>
     </div>
   );
 }
