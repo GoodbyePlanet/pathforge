@@ -49,7 +49,7 @@ export function ContributorsLegend({ nodes }: ContributorsLegendProps) {
       className='bg-white/90 backdrop-blur-sm rounded-lg border
         border-gray-200 px-3 py-2 shadow-sm'
     >
-      <p className='text-[10px] font-medium text-gray-500 mb-1.5'>
+      <p className='text-[10px] font-bold text-gray-500 mb-1.5'>
         Contributors
       </p>
       <div className='flex flex-col gap-1.5'>

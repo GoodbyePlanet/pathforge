@@ -22,6 +22,9 @@ import { GraphEdge } from '@/components/GraphEdge';
 import { NodePopup } from '@/components/NodePopup';
 import { StatusLegend } from '@/components/StatusLegend';
 import { ContributorsLegend } from '@/components/ContributorsLegend';
+import { GraphSearch } from '@/components/GraphSearch';
+import { GraphStats } from '@/components/GraphStats';
+import { ZoomControls } from '@/components/ZoomControls';
 
 const nodeTypes = { graphNode: GraphNode };
 const edgeTypes = { graphEdge: GraphEdge };
@@ -56,6 +59,7 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
   const [nodes, setNodes, onNodesChange] = useNodesState(rawNodes);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [popup, setPopup] = useState<PopupState | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const quantizedZoom = useMemo(
     () => Math.round(rawZoom * 10) / 10,
@@ -75,23 +79,51 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
 
   // Apply selection/highlight data and zoom to nodes
   useEffect(() => {
+    const hasSearch = searchQuery.trim().length > 0;
+    const query = searchQuery.toLowerCase();
+
     setNodes((currentNodes) =>
-      currentNodes.map((node) => ({
-        ...node,
-        data: {
-          ...node.data,
-          isSelected: node.id === selectedNodeId,
-          isHighlighted: connectedIds.has(node.id),
-          isDimmed: selectedNodeId !== null
-            && node.id !== selectedNodeId
-            && !connectedIds.has(node.id),
-          zoom: quantizedZoom,
-        },
-      })),
+      currentNodes.map((node) => {
+        const label = String(node.data.label).toLowerCase();
+        const isMatch = hasSearch ? label.includes(query) : null;
+
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            isSelected: !hasSearch && node.id === selectedNodeId,
+            isHighlighted: hasSearch ? isMatch === true : connectedIds.has(node.id),
+            isDimmed: hasSearch
+              ? isMatch === false
+              : selectedNodeId !== null
+                && node.id !== selectedNodeId
+                && !connectedIds.has(node.id),
+            zoom: quantizedZoom,
+          },
+        };
+      }),
     );
-  }, [selectedNodeId, connectedIds, quantizedZoom, setNodes]);
+  }, [selectedNodeId, connectedIds, quantizedZoom, setNodes, searchQuery]);
 
   const styledEdges = useMemo(() => {
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      const matchingIds = new Set(
+        rawNodes
+          .filter((n) => String(n.data.label).toLowerCase().includes(query))
+          .map((n) => n.id),
+      );
+      return rawEdges.map((edge) => {
+        const isConnected = matchingIds.has(edge.source) && matchingIds.has(edge.target);
+        return {
+          ...edge,
+          style: isConnected
+            ? { stroke: '#6b7280', strokeWidth: 2 }
+            : { stroke: '#d1d5db', strokeWidth: 1, opacity: 0.1 },
+        };
+      });
+    }
+
     if (!selectedNodeId) return rawEdges;
     return rawEdges.map((edge) => {
       const isConnected = edge.source === selectedNodeId || edge.target === selectedNodeId;
@@ -103,7 +135,7 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
           : { stroke: '#d1d5db', strokeWidth: 1, opacity: 0.2 },
       };
     });
-  }, [rawEdges, selectedNodeId]);
+  }, [rawEdges, rawNodes, selectedNodeId, searchQuery]);
 
   const handleDragStart: OnNodeDrag = useCallback(
     (_, node) => onNodeDragStart(node.id),
@@ -111,7 +143,8 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
   );
 
   const handleDrag: OnNodeDrag = useCallback(
-    (_, node) => onNodeDrag(node.id, node.position.x, node.position.y),
+    (_, node) =>
+        onNodeDrag(node.id, node.position.x, node.position.y),
     [onNodeDrag],
   );
 
@@ -187,6 +220,12 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
       >
         <Background variant={BackgroundVariant.Dots} gap={24} size={1} color='#c5cbd3' />
       </ReactFlow>
+      <div className='absolute top-3 left-3 z-30'>
+        <GraphSearch value={searchQuery} onChange={setSearchQuery} />
+      </div>
+      <div className='absolute bottom-14 left-3 z-30'>
+        <ZoomControls />
+      </div>
       {popup && (
         <NodePopup
           label={popup.label}
@@ -220,6 +259,7 @@ export function GraphView(props: GraphViewProps) {
         <GraphViewInner {...props} />
       </ReactFlowProvider>
       <div className='absolute top-3 right-3 z-30 flex flex-col gap-2'>
+        <GraphStats nodes={props.nodes} edges={props.edges} />
         <StatusLegend />
         <ContributorsLegend nodes={props.nodes} />
       </div>
