@@ -12,6 +12,7 @@ human language. They are the foundation behind modern AI assistants, code genera
 ## Key Topics
 
 - **[[types-of-llms]]** — reasoning, non-reasoning, specialised, and multimodal models + use cases
+- **[[encoders-decoders]]** — what are encoders and decoders, how they work
 - **[[inference]]** — what happens when you call an LLM
 - **[[inference-time-scaling]]** — why giving models more compute at inference improves reasoning
 - **[[recursive-language-models]]** — RLMs and recursive approaches to language modeling
