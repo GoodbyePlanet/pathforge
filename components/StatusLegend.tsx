@@ -44,21 +44,20 @@ function LegendDot({ type }: { type: 'done' | 'in-progress' | 'todo' }) {
   }
 
   return (
-    <div className='relative' style={{ width: size + 6, height: size + 6 }}>
+    <div className='relative' style={{ width: size + 8, height: size + 8 }}>
       <div
-        className='absolute rounded-full border'
+        className='absolute rounded-full'
         style={{
-          top: 3,
-          left: 3,
+          top: 4,
+          left: 4,
           width: size,
           height: size,
-          backgroundColor: 'hsl(210, 55%, 82%)',
-          borderColor: 'hsl(210, 60%, 68%)',
+          backgroundColor: 'hsl(210, 20%, 94%)',
         }}
       />
       <div
         className='absolute inset-0 rounded-full'
-        style={{ border: '1.5px dashed hsl(210, 60%, 68%)' }}
+        style={{ border: '2px dashed hsl(210, 65%, 52%)' }}
       />
     </div>
   );

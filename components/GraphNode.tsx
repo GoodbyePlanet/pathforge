@@ -58,10 +58,17 @@ function getDoneAdjusted(
   borderLight: number,
   status?: string,
 ): NodeColor {
+  if (status === 'todo') {
+    return {
+      bg: `hsl(${hue}, 20%, 94%)`,
+      border: `hsl(${hue}, 65%, 52%)`,
+    };
+  }
+
   if (status === 'done') {
-    sat = Math.min(sat + 18, 100);
+    sat = Math.min(sat + 20, 100);
     light = Math.max(light - 12, 0);
-    borderSat = Math.min(borderSat + 15, 100);
+    borderSat = Math.min(borderSat + 18, 100);
     borderLight = Math.max(borderLight - 10, 0);
   }
 
@@ -183,12 +190,12 @@ export function GraphNode({ id, data }: NodeProps) {
           <div
             className='absolute'
             style={{
-              inset: -4,
-              width: size + 8,
-              height: size + 8,
+              inset: -6,
+              width: size + 12,
+              height: size + 12,
             }}
           >
-            {renderShapeSvg(shape, 'none', color.border, 2, '6 3')}
+            {renderShapeSvg(shape, 'none', color.border, 3, '7 4')}
           </div>
         )}
         <Handle type='target' position={Position.Top} style={centerHandleStyle} />
