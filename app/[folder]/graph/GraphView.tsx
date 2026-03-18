@@ -25,6 +25,7 @@ import { ContributorsLegend } from '@/components/ContributorsLegend';
 import { GraphSearch } from '@/components/GraphSearch';
 import { GraphStats } from '@/components/GraphStats';
 import { ZoomControls } from '@/components/ZoomControls';
+import { StatusFilter, type StatusFilterValue } from '@/components/StatusFilter';
 
 const nodeTypes = { graphNode: GraphNode };
 const edgeTypes = { graphEdge: GraphEdge };
@@ -53,7 +54,11 @@ type PopupState = {
   placement: 'left' | 'right';
 };
 
-function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewProps) {
+type GraphViewInnerProps = GraphViewProps & {
+  statusFilter: StatusFilterValue;
+};
+
+function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges, statusFilter }: GraphViewInnerProps) {
   const { flowToScreenPosition } = useReactFlow();
   const { zoom: rawZoom } = useViewport();
   const [nodes, setNodes, onNodesChange] = useNodesState(rawNodes);
@@ -81,29 +86,45 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
   useEffect(() => {
     const hasSearch = searchQuery.trim().length > 0;
     const query = searchQuery.toLowerCase();
+    const hasFilter = statusFilter !== 'all';
 
     setNodes((currentNodes) =>
       currentNodes.map((node) => {
         const label = String(node.data.label).toLowerCase();
-        const isMatch = hasSearch ? label.includes(query) : null;
+        const nodeStatus = node.data.status as string | undefined;
+        const isSearchMatch = hasSearch ? label.includes(query) : null;
+
+        const matchesFilter = !hasFilter || (
+          statusFilter === 'todo'
+            ? !nodeStatus || nodeStatus === 'todo'
+            : nodeStatus === statusFilter
+        );
+
+        const isDimmed = hasSearch
+          ? isSearchMatch === false
+          : hasFilter
+            ? !matchesFilter
+            : selectedNodeId !== null
+              && node.id !== selectedNodeId
+              && !connectedIds.has(node.id);
+
+        const isHighlighted = hasSearch
+          ? isSearchMatch === true
+          : !hasFilter && connectedIds.has(node.id);
 
         return {
           ...node,
           data: {
             ...node.data,
-            isSelected: !hasSearch && node.id === selectedNodeId,
-            isHighlighted: hasSearch ? isMatch === true : connectedIds.has(node.id),
-            isDimmed: hasSearch
-              ? isMatch === false
-              : selectedNodeId !== null
-                && node.id !== selectedNodeId
-                && !connectedIds.has(node.id),
+            isSelected: node.id === selectedNodeId,
+            isHighlighted,
+            isDimmed,
             zoom: quantizedZoom,
           },
         };
       }),
     );
-  }, [selectedNodeId, connectedIds, quantizedZoom, setNodes, searchQuery]);
+  }, [selectedNodeId, connectedIds, quantizedZoom, setNodes, searchQuery, statusFilter]);
 
   const styledEdges = useMemo(() => {
     if (searchQuery.trim()) {
@@ -219,6 +240,7 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
         style={{ backgroundColor: '#f8fafc' }}
       >
         <Background variant={BackgroundVariant.Dots} gap={24} size={1} color='#c5cbd3' />
+
       </ReactFlow>
       <div className='absolute top-3 left-3 z-30'>
         <GraphSearch value={searchQuery} onChange={setSearchQuery} />
@@ -246,6 +268,7 @@ function GraphViewInner({ folder, nodes: rawNodes, edges: rawEdges }: GraphViewP
 
 export function GraphView(props: GraphViewProps) {
   const [mounted, setMounted] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<StatusFilterValue>('all');
 
   useEffect(() => {
     setMounted(true);
@@ -256,12 +279,14 @@ export function GraphView(props: GraphViewProps) {
   return (
     <div className='relative w-full h-full'>
       <ReactFlowProvider>
-        <GraphViewInner {...props} />
+        <GraphViewInner {...props} statusFilter={statusFilter} />
       </ReactFlowProvider>
       <div className='absolute top-3 right-3 z-30 flex flex-col gap-2'>
         <GraphStats nodes={props.nodes} edges={props.edges} />
+        <StatusFilter value={statusFilter} onChange={setStatusFilter} />
         <StatusLegend />
         <ContributorsLegend nodes={props.nodes} />
+
       </div>
     </div>
   );

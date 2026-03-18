@@ -37,6 +37,15 @@ export function GraphStats({ nodes, edges }: GraphStatsProps) {
           </span>
         </div>
       </div>
+      <div className='mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden'>
+        <div
+          className='h-full rounded-full transition-all duration-700'
+          style={{
+            width: `${pct}%`,
+            background: `hsl(${pct * 1.42}, 70%, 50%)`,
+          }}
+        />
+      </div>
     </div>
   );
 }
