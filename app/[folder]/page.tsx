@@ -1,15 +1,9 @@
 import Link from 'next/link';
 
 import { getHierarchicalFiles } from '@/lib/content';
+import { formatFolderName } from '@/lib/format';
 
 import { FolderAccordion } from '@/components/FolderAccordion';
-
-function formatFolderName(folder: string): string {
-  return folder
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
 
 type Props = {
   params: Promise<{ folder: string }>;

@@ -1,14 +1,9 @@
 import Link from 'next/link';
 
 import { buildGraphData } from '@/lib/markdown';
-import { GraphView } from './GraphView';
+import { formatFolderName } from '@/lib/format';
 
-function formatFolderName(folder: string): string {
-  return folder
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
+import { GraphView } from './GraphView';
 
 type Props = {
   params: Promise<{ folder: string }>;

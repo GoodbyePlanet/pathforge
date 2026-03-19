@@ -4,13 +4,7 @@ import remarkGfm from 'remark-gfm';
 import remarkWikiLink from 'remark-wiki-link';
 
 import { getFileContent } from '@/lib/content';
-
-function formatFolderName(folder: string): string {
-  return folder
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
+import { formatFolderName } from '@/lib/format';
 
 function preprocessWikiLinks(markdown: string, folder: string): string {
   return markdown.replace(/\[\[([^\]]+)\]\]/g, (_, slug) => {
