@@ -1,7 +1,7 @@
 ---
 title: "Observability"
 assignee: Nemanja Vasic
-status: todo
+status: in-progress
 ---
 
 # Observability
