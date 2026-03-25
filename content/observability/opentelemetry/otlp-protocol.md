@@ -1,7 +1,7 @@
 ---
 title: "OTLP Protocol"
 assignee: Nemanja Vasic
-status: in-progress
+status: done
 ---
 
 # OTLP Protocol
@@ -32,10 +32,24 @@ mechanism. You can switch between them without changing your instrumentation cod
 OTLP organizes telemetry into three signal types, each with its own protobuf message structure:
 
 - **Traces** — `ResourceSpans` → `ScopeSpans` → `Span`. Each span has a trace ID, span ID, parent span ID, name,
-  status, attributes, and events.
+status, attributes, and events.
+ 
+A trace is essentially a tree of spans that represents the full journey of a request through your system. For example, from the file's diagram:
+```bash
+order-service                                                                                                                                                                                            
+├── HTTP instrumentation created: "GET /orders" and "GET /orders/:id"                                                                                                                                    
+└── Postgres instrumentation created: "SELECT orders" and "SELECT order_items"
+```
 - **Metrics** — `ResourceMetrics` → `ScopeMetrics` → `Metric`. Supports gauge, sum, histogram, exponential histogram,
   and summary data points.
+ 
+So metrics are numerical measurements of your system's behavior over time —
+  like request counts, error rates, or response latencies.
+
 - **Logs** — `ResourceLogs` → `ScopeLogs` → `LogRecord`. Each record has a timestamp, severity, body, and attributes.
+
+Logs are timestamped text records of events that happened in your system — 
+like errors, warnings, or status messages.
 
 All three follow the same nesting pattern: **Resource → Scope → Data**.
 

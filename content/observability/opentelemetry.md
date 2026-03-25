@@ -6,7 +6,7 @@ status: done
 
 # OpenTelemetry
 
-OpenTelemetry (OTel) is open source, as well as vendor and tool agnostic open standard for generating, collecting,
+OpenTelemetry (OTel) is an open source, vendor, and tool agnostic open standard for generating, collecting,
 managing, and exporting telemetry data — traces, metrics, and logs. It provides APIs, SDKs, and a collector that unify
 instrumentation across languages and backends.
 Vendor-agnostic means OpenTelemetry doesn't tie you to any specific observability backend. You instrument your code
