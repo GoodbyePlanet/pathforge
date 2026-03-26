@@ -23,7 +23,7 @@ OTel specification is available at [opentelemetry.io](https://opentelemetry.io/d
 
 ## Key Topics
 
-- **[[otel-architecture]]** — architecture of the OpenTelementry and its components
+- **[[otel-client-architecture]]** — architecture of the OTel client and its components
 - **[[otlp-protocol]]** — the wire protocol for transmitting telemetry data
 - **[[otel-collector]]** — collecting, processing, and exporting telemetry
 - **[[otel-sdks]]** — instrumenting your code with OpenTelemetry SDKs
