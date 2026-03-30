@@ -1,12 +1,13 @@
 ---
 title: "Structured Logging"
 assignee: Nemanja Vasic
-status: todo
+status: done
 ---
 
 # Structured Logging
 
-Structured logging outputs log entries as key-value pairs (typically JSON) rather than free-form text. This makes logs machine-parseable, searchable, and easy to correlate with traces and metrics.
+Structured logging outputs log entries as key-value pairs (typically JSON) rather than free-form text.
+This makes logs machine-parseable, searchable, and easy to correlate with traces and metrics.
 
 ## Key Topics
 
@@ -15,4 +16,5 @@ Structured logging outputs log entries as key-value pairs (typically JSON) rathe
 
 ## Why Structured
 
-Free-form logs like `"User 123 failed to login"` are easy to read but hard to query at scale. Structured logs like `{"event": "login_failed", "user_id": 123}` let you filter, aggregate, and alert programmatically.
+Free-form logs like `"User 123 failed to login"` are easy to read but hard to query at scale.
+Structured logs like `{"event": "login_failed", "user_id": 123}` let you filter, aggregate, and alert programmatically.
