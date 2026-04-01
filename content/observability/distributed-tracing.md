@@ -1,12 +1,13 @@
 ---
 title: "Distributed Tracing"
 assignee: Nemanja Vasic
-status: todo
+status: done
 ---
 
 # Distributed Tracing
 
-Distributed tracing tracks a single request as it flows through multiple services. Each service adds a span — a timed operation — and spans are linked together into a trace that shows the full request lifecycle.
+Distributed tracing tracks a single request as it flows through multiple services. Each service adds a span —
+a timed operation — and spans are linked together into a trace that shows the full request lifecycle.
 
 ## Key Topics
 
