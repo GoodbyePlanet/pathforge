@@ -131,6 +131,79 @@ export type FileContent = {
   status?: NodeStatus;
 };
 
+export type SearchResult = {
+  slug: string;
+  title: string;
+  status?: NodeStatus;
+  assignee?: string;
+  snippet?: string;
+};
+
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/`(.+?)`/g, '$1')
+    .replace(/\[(.+?)\]\(.+?\)/g, '$1')
+    .replace(/\[\[(.+?)\]\]/g, '$1')
+    .replace(/^[-*+]\s+/gm, '')
+    .replace(/^\d+\.\s+/gm, '')
+    .replace(/^>\s+/gm, '')
+    .replace(/\n+/g, ' ')
+    .trim();
+}
+
+function extractSnippet(content: string, query: string, contextChars = 80): string | undefined {
+  const lowerContent = content.toLowerCase();
+  const lowerQuery = query.toLowerCase();
+  const index = lowerContent.indexOf(lowerQuery);
+
+  if (index === -1) return undefined;
+
+  const start = Math.max(0, index - contextChars);
+  const end = Math.min(content.length, index + query.length + contextChars);
+
+  let snippet = stripMarkdown(content.slice(start, end));
+
+  if (start > 0) snippet = '...' + snippet;
+  if (end < content.length) snippet = snippet + '...';
+
+  return snippet;
+}
+
+export async function searchFiles(folder: string, query: string): Promise<SearchResult[]> {
+  if (!query.trim()) return [];
+
+  const folderPath = path.join(contentDir, folder);
+  const allFiles = await collectMarkdownFiles(folderPath);
+  const lowerQuery = query.toLowerCase();
+  const results: SearchResult[] = [];
+
+  for (const filePath of allFiles) {
+    const raw = await fs.readFile(filePath, 'utf-8');
+    const { data: frontmatter, content } = matter(raw);
+    const slug = path.basename(filePath, '.md');
+    const title = extractH1Title(content) ?? slug;
+    const assignee = typeof frontmatter.assignee === 'string'
+      ? frontmatter.assignee
+      : undefined;
+    const status = validStatuses.has(frontmatter.status)
+      ? frontmatter.status as NodeStatus
+      : undefined;
+
+    const titleMatch = title.toLowerCase().includes(lowerQuery);
+    const contentMatch = content.toLowerCase().includes(lowerQuery);
+
+    if (titleMatch || contentMatch) {
+      const snippet = contentMatch ? extractSnippet(content, query) : undefined;
+      results.push({ slug, title, status, assignee, snippet });
+    }
+  }
+
+  return results;
+}
+
 export async function getFileContent(folder: string, slug: string): Promise<FileContent> {
   const folderPath = path.join(contentDir, folder);
   const allFiles = await collectMarkdownFiles(folderPath);
