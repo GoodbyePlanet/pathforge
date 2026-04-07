@@ -38,6 +38,11 @@ docker run --tmpfs /app/tmp my-app
 - `docker compose down` does **not** remove volumes by default; use `docker compose down -v` to include them
 - Orphaned volumes accumulate over time — clean up with `docker volume prune`
 
+## Gotchas
+
+- **Bind mounts obscure image files.** When you bind mount a directory to a path inside the container, it completely hides whatever was at that path in the image. The image files still exist in the layer — they're just covered by the mount.
+- **Named volumes seed from the image.** If you mount an empty named volume to a path that already has files in the image, Docker copies those image files into the volume on first use. This is how database images like Postgres initialize their data directory. It only happens once — after that, the volume's contents take over.
+
 ## Best Practices
 
 - Use named volumes for databases and stateful services

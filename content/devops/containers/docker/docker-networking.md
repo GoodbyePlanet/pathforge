@@ -35,6 +35,10 @@ docker run -p 8080:3000 my-app
 # host:8080 → container:3000
 ```
 
+## Network Isolation
+
+Networks also isolate groups of containers from each other. Your front-end containers don't need direct access to the database — put them on separate networks. The front-end talks to the back-end, the back-end talks to the database, and the front-end can't reach the database at all.
+
 ## Best Practices
 
 - Always use custom bridge networks instead of the default bridge

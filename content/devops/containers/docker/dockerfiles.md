@@ -14,8 +14,15 @@ A Dockerfile is a text file with instructions for building a Docker image. Each 
 - `WORKDIR` — sets the working directory inside the container
 - `COPY` / `ADD` — copy files from host into the image
 - `RUN` — execute a command during build (e.g., `npm install`)
-- `EXPOSE` — document which port the app listens on
-- `CMD` / `ENTRYPOINT` — define the default command when the container starts
+- `EXPOSE` — documents which port the app listens on. Does **not** actually open the port — you still need `-p` at runtime to publish it.
+- `CMD` — default command (or default arguments to `ENTRYPOINT`) when the container starts
+- `ENTRYPOINT` — the executable the container always runs
+
+## CMD vs ENTRYPOINT
+
+`ENTRYPOINT` defines the program. `CMD` provides default arguments. When someone overrides the command at runtime with `docker run myapp worker.js`, they replace `CMD`, not `ENTRYPOINT`.
+
+If your entrypoint is `node` and your command is `server.js`, then `docker run myapp worker.js` runs `node worker.js`. The entrypoint stays, the arguments change. Use `ENTRYPOINT` when the container should always run the same program. Use `CMD` for the default arguments someone might want to swap.
 
 ## Layer Caching
 
@@ -38,6 +45,10 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 CMD ["node", "dist/index.js"]
 ```
+
+## Build Context
+
+When you run `docker build .`, the dot is the **build context** — the set of files available to `COPY` instructions. If your project has large directories you don't need in the image, a broad `COPY . .` pulls them all in. Use `.dockerignore` to exclude unnecessary files and keep builds fast.
 
 ## Best Practices
 
