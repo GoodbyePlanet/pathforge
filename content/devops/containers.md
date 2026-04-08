@@ -24,8 +24,8 @@ This makes containers lightweight, fast to start, and efficient with resources.
 ## How Containers Work
 
 Your operating system's kernel has features that allow it to isolate groups of processes from each other. 
-On Linux, these are namespaces and cgroups. Namespaces give a process its own isolated view of the system — 
-its own process tree, network interfaces, and filesystem root. Cgroups limit how much CPU and memory a process can use.
+On Linux, these are **namespaces** and **cgroups**. **Namespaces** give a process its own isolated view of the system — 
+its own process tree, network interfaces, and filesystem root. **Cgroups** limit how much CPU and memory a process can use.
 
 A container is just a regular process on your machine running with these isolation features applied. 
 There's no separate OS, no hypervisor — just kernel-level isolation around a normal process.

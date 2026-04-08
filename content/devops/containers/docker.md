@@ -47,5 +47,5 @@ container is removed, the writable layer is gone.
 
 ## Why Docker
 
-"Works on my machine" stops being an excuse. Docker guarantees environment consistency from local development to
-production, simplifies dependency management, and makes deployments reproducible.
+Docker guarantees environment consistency from local development to production, simplifies dependency management,
+and makes deployments reproducible.

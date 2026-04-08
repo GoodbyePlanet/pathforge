@@ -53,3 +53,7 @@ npm run lint
 **Graph positions:** hybrid — d3-force auto-layout on first load; manual drag positions persist in `localStorage` keyed by folder.
 
 **Graph scope:** per-folder (one learning path at a time, fully isolated).
+
+### Formating rules:
+- Use 2 spaces for indentation
+- In Markdown files, never exceed 120 characters per line
