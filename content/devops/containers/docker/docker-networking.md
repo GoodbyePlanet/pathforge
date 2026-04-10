@@ -11,8 +11,9 @@ isolated network namespaces for each container and provides several network driv
 
 ## Network Drivers
 
-- **bridge** — the default. Containers on the same bridge network can reach each other by name. Isolated from the host
-  network.
+  **bridge** — the default driver. The default bridge network does not provide DNS resolution — containers must
+  reach each other by IP. Bridge networks are isolated from the host — containers get their own subnet and
+  can't be reached from the host unless you explicitly publish ports with `-p`.
 - **host** — removes network isolation; the container shares the host's network stack. Good for performance-sensitive
   workloads.
 - **none** — disables networking entirely. Useful for batch jobs that don't need network access.
