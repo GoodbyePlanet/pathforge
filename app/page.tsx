@@ -10,11 +10,19 @@ type FolderStats = {
   todo: number;
 };
 
-function computeStats(items: { status?: NodeStatus }[]): FolderStats {
-  const done = items.filter((i) => i.status === 'done').length;
-  const inProgress = items.filter((i) => i.status === 'in-progress').length;
-  const todo = items.filter((i) => i.status === 'todo').length;
-  return { total: items.length, done, inProgress, todo };
+type StatusItem = { status?: NodeStatus };
+
+function countByStatus(items: StatusItem[], status: NodeStatus): number {
+  return items.filter((item) => item.status === status).length;
+}
+
+export function computeStats(items: StatusItem[]): FolderStats {
+  return {
+    total: items.length,
+    done: countByStatus(items, 'done'),
+    inProgress: countByStatus(items, 'in-progress'),
+    todo: countByStatus(items, 'todo'),
+  };
 }
 
 async function getFolderStats(folder: string): Promise<FolderStats> {
